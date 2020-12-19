@@ -2,7 +2,7 @@
 
 PLATFORM=$1
 if [ -z "$PLATFORM" ]; then
-    ARCH="64"
+    ARCH="amd64"
 else
     case "$PLATFORM" in
         linux/386)
@@ -47,7 +47,3 @@ echo "Prepare to use"
 unzip xray.zip && chmod +x xray-linux-${ARCH}
 mv xray-linux-${ARCH} /usr/bin/xray
 mv geosite.dat geoip.dat /usr/bin/
-
-# Clean
-rm -rfv ${PWD}/*
-echo "Done"

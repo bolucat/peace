@@ -32,8 +32,9 @@ else
     esac
 fi
 [ -z "${ARCH}" ] && echo "Error: Not supported OS Architecture" && exit 1
+
 # Download binary file
-TROJAN_FILE="trojan-go-linux-${ARCH}"
+TROJAN_FILE="trojan-go-linux-${ARCH}.zip"
 
 echo "Downloading binary file: ${TROJAN_FILE}"
 wget -O $PWD/trojan-go.zip https://github.com/bolucat/peace/releases/latest/download/${TROJAN_FILE} > /dev/null 2>&1
@@ -46,7 +47,3 @@ echo "Prepare to use"
 unzip trojan-go.zip && chmod +x trojan-go-linux-${ARCH}
 mv trojan-go-linux-${ARCH} /usr/bin/trojan-go
 mv geosite.dat geoip.dat /usr/bin/
-
-# Clean
-rm -rfv ${PWD}/*
-echo "Done"

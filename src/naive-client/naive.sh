@@ -30,6 +30,3 @@ tar -xvJf ${FILE} && rm -fv ${FILE}
 # Prepare
 chmod +x ${FOLDER}/naive && mv ${FOLDER}/naive /usr/bin/naive && strip -s /usr/bin/naive
 mv ${FOLDER}/config.json /etc/naiveproxy/config.json
-
-# Clean
-rm -rfv $PWD/*
