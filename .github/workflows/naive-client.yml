@@ -1,0 +1,86 @@
+on:
+  push:
+    paths:
+      - 'version/naive-client'
+
+name: naive-client
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Set variables
+        run: |
+          echo "VERSION=$(cat "version/naive-client" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Get Dockerfile
+        run: |
+          cp src/naive-client/* $PWD
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build latest
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/naiveproxy:client
+            ${{ secrets.DOCKER_USERNAME }}/naiveproxy:${{ env.VERSION }}
+           
+  test:
+     needs: build
+     runs-on: ubuntu-20.04
+     steps:
+       
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Setup variables
+        run: |
+          echo "VERSION=$(cat "version/naive-client" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Test Docker image
+        run: |
+          docker run --rm --entrypoint /usr/bin/naive ${{ secrets.DOCKER_USERNAME }}/naiveproxy:client --version
+          docker run --rm --entrypoint /usr/bin/naive ${{ secrets.DOCKER_USERNAME }}/naiveproxy:${{ env.VERSION }} --version
+
+  backup:
+      needs: [build,test]
+      runs-on: ubuntu-20.04
+      steps:
+
+        - name: Checkout
+          uses: actions/checkout@v2
+
+        - name: Set variables
+          run: |
+            echo "TAGS=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          shell: bash
+
+        - name: Start backup
+          run: |
+            wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/releases/tags/${{ env.TAGS }} | jq ".assets[] | {browser_download_url}" -c | jq .browser_download_url -r | wget -i -
+            mkdir -p release && mv naiveproxy-* release && tar -zvcf release.tar.gz release
+
+        - name: Release
+          uses: actions/upload-artifact@v2
+          with:
+            name: ${{ env.TAGS }}
+            path: release.tar.gz

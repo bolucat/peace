@@ -1,0 +1,11 @@
+:443, example.com
+tls me@example.com
+route {
+  forward_proxy {
+    basicauth user pass
+    hide_ip
+    hide_via
+    probe_resistance secret.com
+  }
+  file_server { root /var/www/html }
+}

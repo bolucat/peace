@@ -1,0 +1,47 @@
+on:
+  push:
+    paths:
+      - 'version/gitea'
+
+name: gitea
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Env
+        run: |
+          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/gitea" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "NODE_OPTIONS=--max_old_space_size=4096" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Install Golang
+        uses: actions/setup-go@v2
+        with: 
+          go-version: ${{ env.GOLANG }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.1.3
+        with:
+          node-version: '15.x'
+          check-latest: true
+
+      - name: Start build
+        run: |
+          cp src/build/gitea.sh $PWD/gitea.sh && chmod +x gitea.sh && ./gitea.sh
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ env.VERSION }}
+          tag_name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: |
+            ./release/*
