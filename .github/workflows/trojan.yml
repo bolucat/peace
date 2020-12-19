@@ -58,5 +58,5 @@ jobs:
 
       - name: Test Docker image
         run: |
-          docker run --rm --entrypoint /usr/bin/trojan ${{ secrets.DOCKER_USERNAME }}/trojan:latest -version
-          docker run --rm --entrypoint /usr/bin/trojan ${{ secrets.DOCKER_USERNAME }}/trojan:${{ env.VERSION }} -version
+          docker run --rm --entrypoint /usr/bin/trojan ${{ secrets.DOCKER_USERNAME }}/trojan:latest --version
+          docker run --rm --entrypoint /usr/bin/trojan ${{ secrets.DOCKER_USERNAME }}/trojan:${{ env.VERSION }} --version
