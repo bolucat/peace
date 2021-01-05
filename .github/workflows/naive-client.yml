@@ -67,6 +67,7 @@ jobs:
             ./release/*
 
   push:
+    needs: build
     runs-on: ubuntu-20.04
     steps:
 
@@ -123,7 +124,6 @@ jobs:
           docker run --rm --entrypoint /usr/bin/naive ${{ secrets.DOCKER_USERNAME }}/naiveproxy:${{ env.VERSION }} --version
 
   backup:
-      needs: [push,test]
       runs-on: ubuntu-20.04
       steps:
 
