@@ -1,10 +1,11 @@
-FROM --platform=${TARGETPLATFORM} ubuntu:latest
+FROM --platform=${TARGETPLATFORM} debian:latest
 
 WORKDIR /root
 ARG TARGETPLATFORM
 COPY naive.sh /root/naive.sh
+COPY config.json /etc/naiveproxy/config.json
 
-RUN (apt update && apt install -y wget xz-utils libnss3 binutils && rm -rf /var/lib/apt/lists/*) \
+RUN (apt update && apt install -y wget libnss3 binutils) \
  && (yes | apt upgrade) \
  && mkdir -p /etc/naiveproxy /var/log/naive \
  && chmod +x /root/naive.sh \

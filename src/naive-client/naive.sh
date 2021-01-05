@@ -3,11 +3,17 @@
 # Set ARG
 PLATFORM=$1
 if [ -z "$PLATFORM" ]; then
-    ARCH="x64"
+    ARCH="amd64"
 else
     case "$PLATFORM" in
+        linux/386)
+            ARCH="386"
+            ;;
         linux/amd64)
-            ARCH="x64"
+            ARCH="amd64"
+            ;;
+        linux/arm/v7)
+            ARCH="arm32-v7"
             ;;
         linux/arm64|linux/arm64/v8)
             ARCH="arm64"
@@ -20,13 +26,16 @@ fi
 [ -z "${ARCH}" ] && echo "Error: Not support" && exit 1
 
 # Download files
-VERSION=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -n1)
-FILE="naiveproxy-${VERSION}-linux-${ARCH}.tar.xz"
-FOLDER="naiveproxy-${VERSION}-linux-${ARCH}"
+VERSION=$(wget -qO- https://api.github.com/repos/bolucat/peace/tags | grep 'name' | cut -d\" -f4 | head -n1)
+NAIVE_FILE="naive-linux-${ARCH}"
 
-wget https://github.com/klzgrad/naiveproxy/releases/download/${VERSION}/${FILE}
-tar -xvJf ${FILE} && rm -fv ${FILE}
+echo "Downloading binary file: ${NAIVE_FILE}"
+wget -O /usr/bin/naive https://github.com/bolucat/peace/releases/download/${VERSION}/${NAIVE_FILE} > /dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to download binary file: ${NAIVE_FILE}" && exit 1
+fi
+echo "Download binary file: ${NAIVE_FILE} completed"
 
 # Prepare
-chmod +x ${FOLDER}/naive && mv ${FOLDER}/naive /usr/bin/naive && strip -s /usr/bin/naive
-mv ${FOLDER}/config.json /etc/naiveproxy/config.json
+chmod +x /usr/bin/naive && strip -s /usr/bin/naive

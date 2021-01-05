@@ -6,6 +6,67 @@ on:
 name: naive-client
 jobs:
   build:
+    strategy:
+      matrix:
+        cpu: [x86, x64, arm, arm64]
+      fail-fast: false
+
+    runs-on: ubuntu-18.04
+    env:
+      EXTRA_FLAGS: target_cpu="${{ matrix.cpu }}"
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Set variables
+        run: |
+          echo "VERSION=$(cat "version/naive-client" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Build
+        run: |
+          sudo apt-get install -y git curl unzip ccache python-minimal ninja-build qemu-user pkg-config libnss3-dev
+          NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)
+          git clone -b ${NAIVE} https://github.com/klzgrad/naiveproxy.git && cd naiveproxy
+          ./tools/import-upstream.sh
+          cd src && ./get-clang.sh
+          ./build.sh
+
+      - name: Ready to release
+        run: |
+          mkdir -p release
+          case ${{ matrix.cpu }} in
+            x86)
+              mv naiveproxy/src/out/Release/naive release/naive-linux-386
+              ;;
+            x64)
+              mv naiveproxy/src/out/Release/naive release/naive-linux-amd64
+              ;;
+            arm)
+              mv naiveproxy/src/out/Release/naive release/naive-linux-arm32-v7
+              ;;
+            arm64)
+              mv naiveproxy/src/out/Release/naive release/naive-linux-arm64
+              ;;
+            *)
+              echo "Error occured" && exit 1
+              ;;
+          esac
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ env.VERSION }}
+          tag_name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: |
+            ./release/*
+
+  push:
     runs-on: ubuntu-20.04
     steps:
 
@@ -37,14 +98,14 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/386,linux/amd64,linux/arm/v7,linux/arm64
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/naiveproxy:client
             ${{ secrets.DOCKER_USERNAME }}/naiveproxy:${{ env.VERSION }}
            
   test:
-     needs: build
+     needs: [build,push]
      runs-on: ubuntu-20.04
      steps:
        
@@ -62,7 +123,7 @@ jobs:
           docker run --rm --entrypoint /usr/bin/naive ${{ secrets.DOCKER_USERNAME }}/naiveproxy:${{ env.VERSION }} --version
 
   backup:
-      needs: [build,test]
+      needs: [push,test]
       runs-on: ubuntu-20.04
       steps:
 
