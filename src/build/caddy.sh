@@ -24,10 +24,10 @@ for ARCH in ${ARCHS[@]}; do
 	if [ "${ARCH}" == "arm" ]; then
 		for ARM in ${ARMS[@]}; do
 			echo "Building caddy-linux-${ARCH}32-v${ARM}"
-			env GOOS=linux GOARCH=${ARCH} GOARM=${ARM} $GOPATH/bin/xcaddy build --output release/caddy-linux-${ARCH}32-v${ARM} ${NAIVE} ${QUIC_GO} ${PROTOCOLS}
+			env GOOS=linux GOARCH=${ARCH} GOARM=${ARM} $GOPATH/bin/xcaddy build HEAD --output release/caddy-linux-${ARCH}32-v${ARM} ${NAIVE} ${QUIC_GO} ${PROTOCOLS}
 		done
 	else
 		echo "Building caddy-linux-${ARCH}"
-		env GOOS=linux GOARCH=${ARCH} $GOPATH/bin/xcaddy build --output release/caddy-linux-${ARCH} ${NAIVE} ${QUIC_GO} ${PROTOCOLS}
+		env GOOS=linux GOARCH=${ARCH} $GOPATH/bin/xcaddy build HEAD --output release/caddy-linux-${ARCH} ${NAIVE} ${QUIC_GO} ${PROTOCOLS}
 	fi
 done
