@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/naive-client'
+      - 'version/naive-client.txt'
 
 name: naive-client
 jobs:
@@ -21,12 +21,13 @@ jobs:
       
       - name: Set variables
         run: |
-          echo "VERSION=$(cat "version/naive-client" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/naive-client.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Build
         run: |
-          sudo apt-get install -y git curl unzip ccache python-minimal ninja-build qemu-user pkg-config libnss3-dev
+          sudo apt update
+          sudo apt install -y git curl unzip ccache python-minimal ninja-build qemu-user pkg-config libnss3-dev
           NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)
           git clone -b ${NAIVE} https://github.com/klzgrad/naiveproxy.git && cd naiveproxy
           ./tools/import-upstream.sh
@@ -76,7 +77,7 @@ jobs:
       
       - name: Set variables
         run: |
-          echo "VERSION=$(cat "version/naive-client" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/naive-client.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Get Dockerfile
@@ -115,7 +116,7 @@ jobs:
       
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/naive-client" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/naive-client.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Test Docker image
