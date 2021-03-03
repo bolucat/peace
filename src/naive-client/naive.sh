@@ -26,11 +26,10 @@ fi
 [ -z "${ARCH}" ] && echo "Error: Not support" && exit 1
 
 # Download files
-VERSION=$(wget -qO- https://api.github.com/repos/bolucat/peace/tags | grep 'name' | cut -d\" -f4 | head -n1)
 NAIVE_FILE="naive-linux-${ARCH}"
 
 echo "Downloading binary file: ${NAIVE_FILE}"
-wget -O /usr/bin/naive https://github.com/bolucat/peace/releases/download/${VERSION}/${NAIVE_FILE} > /dev/null 2>&1
+wget -O /usr/bin/naive https://github.com/bolucat/peace/releases/latest/download/${NAIVE_FILE} > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
     echo "Error: Failed to download binary file: ${NAIVE_FILE}" && exit 1

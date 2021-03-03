@@ -1,0 +1,195 @@
+on:
+  push:
+    paths:
+      - 'version/bitwarden.txt'
+
+name: bitwarden
+jobs:
+  build:
+    strategy:
+      matrix:
+        arch: [amd64, arm64, armv6, armv7]
+      fail-fast: false
+
+    runs-on: ubuntu-18.04
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Set variables
+        run: |
+          echo "VERSION=$(wget -qO- https://api.github.com/repos/bitwarden/web/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$(wget -qO- https://api.github.com/repos/dani-garcia/bitwarden_rs/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+        shell: bash
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '15.x'
+          check-latest: true
+          
+      - name: Build Web-font
+        run: |
+          git clone https://github.com/dani-garcia/bw_web_builds builds
+          pushd builds || exit 1
+          PATCH="$(find patches -printf "%f\\n" | sort -V | tail -n1)"
+          mv patches/${PATCH} ../${PATCH}
+          popd || exit 1
+          rm -rf builds
+          git clone https://github.com/bitwarden/web web
+          pushd web || exit 1
+          git checkout ${{ env.VERSION }}
+          git submodule update --init --recursive
+          mv ../${PATCH} ./${PATCH}
+          git apply ./${PATCH}
+          echo "apply patch successfully"
+          npm install -g
+          npm install
+          npm audit
+          npm run dist
+          mv build web-vault
+          tar -zvcf "web-vault.tar.gz" web-vault
+          popd || exit 1
+
+      - name: Build Server
+        run: |
+          case ${{ matrix.arch }} in
+            amd64)
+              pushd src/build/bitwarden/amd64 || exit 1
+              docker build -t pocat/bitwarden:amd64 .
+              docker run --name bitwarden -d pocat/bitwarden:amd64 && docker cp bitwarden:/root/bitwarden_rs ./bitwarden-amd64
+              popd || exit 1
+              ;;
+            arm64)
+              pushd src/build/bitwarden/arm64 || exit 1
+              docker build -t pocat/bitwarden:arm64 .
+              docker run --name bitwarden -d pocat/bitwarden:arm64 && docker cp bitwarden:/root/bitwarden_rs ./bitwarden-arm64
+              popd || exit 1
+              ;;
+            armv6)
+              pushd src/build/bitwarden/armv6 || exit 1
+              docker build -t pocat/bitwarden:armv6 .
+              docker run --name bitwarden -d pocat/bitwarden:armv6 && docker cp bitwarden:/root/bitwarden_rs ./bitwarden-armv6
+              popd || exit 1
+              ;;
+            armv7)
+              pushd src/build/bitwarden/armv7 || exit 1
+              docker build -t pocat/bitwarden:armv7 .
+              docker run --name bitwarden -d pocat/bitwarden:armv7 && docker cp bitwarden:/root/bitwarden_rs ./bitwarden-armv7
+              popd || exit 1
+              ;;
+            *)
+              echo "Error occured" && exit 1
+              ;;
+          esac
+
+      - name: Ready to release
+        run: |
+          mkdir -p release
+          case ${{ matrix.arch }} in
+            amd64)
+              mv web/web-vault.tar.gz release/web-vault.tar.gz
+              mv src/build/bitwarden/amd64/bitwarden-amd64 release/bitwarden-amd64
+              pushd release || exit 1
+              tar -zvcf "bitwarden-amd64.tar.gz" web-vault.tar.gz bitwarden-amd64
+              rm -rfv web-vault.tar.gz bitwarden-amd64
+              popd || exit 1
+              ;;
+            arm64)
+              mv web/web-vault.tar.gz release/web-vault.tar.gz
+              mv src/build/bitwarden/arm64/bitwarden-arm64 release/bitwarden-arm64
+              pushd release || exit 1
+              tar -zvcf "bitwarden-arm64.tar.gz" web-vault.tar.gz bitwarden-arm64
+              rm -rfv web-vault.tar.gz bitwarden-arm64
+              popd || exit 1
+              ;;
+            armv6)
+              mv web/web-vault.tar.gz release/web-vault.tar.gz
+              mv src/build/bitwarden/armv6/bitwarden-armv6 release/bitwarden-armv6
+              pushd release || exit 1
+              tar -zvcf "bitwarden-armv6.tar.gz" web-vault.tar.gz bitwarden-armv6
+              rm -rfv web-vault.tar.gz bitwarden-armv6
+              popd || exit 1
+              ;;
+            armv7)
+              mv web/web-vault.tar.gz release/web-vault.tar.gz
+              mv src/build/bitwarden/armv7/bitwarden-armv7 release/bitwarden-armv7
+              pushd release || exit 1
+              tar -zvcf "bitwarden-armv7.tar.gz" web-vault.tar.gz bitwarden-armv7
+              rm -rfv web-vault.tar.gz bitwarden-armv7
+              popd || exit 1
+              ;;
+            *)
+              echo "Error occured" && exit 1
+              ;;
+          esac
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ env.RELEASE_NAME }}
+          tag_name: ${{ env.RELEASE_NAME }}
+          draft: false
+          prerelease: false
+          files: |
+            ./release/*
+
+  push:
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Set variables
+        run: |
+          echo "VERSION=$(cat "version/bitwarden.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Get Dockerfile
+        run: |
+          cp src/bitwarden/* $PWD
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build latest
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/bitwarden:latest
+            ${{ secrets.DOCKER_USERNAME }}/bitwarden:${{ env.VERSION }}
+
+  test:
+     needs: [build,push]
+     runs-on: ubuntu-20.04
+     steps:
+       
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Setup variables
+        run: |
+          echo "VERSION=$(cat "version/bitwarden.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Test Docker image
+        run: |
+          docker run --rm --entrypoint /bitwarden ${{ secrets.DOCKER_USERNAME }}/bitwarden:latest --version
+          docker run --rm --entrypoint /bitwarden ${{ secrets.DOCKER_USERNAME }}/bitwarden:${{ env.VERSION }} --version
