@@ -29,10 +29,12 @@ jobs:
           sudo apt update
           sudo apt install -y git curl unzip ccache python-minimal ninja-build qemu-user pkg-config libnss3-dev
           NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)
-          git clone -b ${NAIVE} https://github.com/klzgrad/naiveproxy.git && cd naiveproxy
-          ./tools/import-upstream.sh
-          cd src && ./get-clang.sh
+          git clone -b ${NAIVE} https://github.com/klzgrad/naiveproxy.git
+          pushd naiveproxy/src || exit 1
+          chmod +x *.sh
+          ./get-clang.sh
           ./build.sh
+          popd || exit 1
 
       - name: Ready to release
         run: |
