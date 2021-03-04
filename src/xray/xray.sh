@@ -44,6 +44,8 @@ fi
 echo "Download binary file: ${XRAY_FILE} completed"
 
 echo "Prepare to use"
-unzip xray.zip && chmod +x xray-linux-${ARCH}
+unzip xray.zip && rm -rfv xray.zip
+chmod +x xray-linux-${ARCH}
 mv xray-linux-${ARCH} /usr/bin/xray
 mv geosite.dat geoip.dat /usr/local/share/xray/
+echo "Done"

@@ -10,7 +10,7 @@ RUN set -ex \
 	&& mkdir -p /var/log/xray /usr/local/share/xray \
 	&& chmod +x /root/xray.sh \
 	&& /root/xray.sh "${TARGETPLATFORM}" \
-	&& rm -fv /root/xray.sh
+	&& rm -rfv /root/xray.sh
 
 VOLUME /etc/xray
 CMD [ "/usr/bin/xray", "run", "-config", "/etc/xray/config.json" ]
