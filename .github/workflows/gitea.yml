@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/gitea'
+      - 'version/gitea.txt'
 
 name: gitea
 jobs:
@@ -15,7 +15,7 @@ jobs:
       - name: Set Env
         run: |
           echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          echo "VERSION=$(cat "version/gitea" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/gitea.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "NODE_OPTIONS=--max_old_space_size=4096" >> $GITHUB_ENV
         shell: bash
 
