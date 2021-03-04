@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/trojan-r'
+      - 'version/trojan-r.txt'
 
 name: trojan-r
 jobs:
@@ -14,7 +14,7 @@ jobs:
       
       - name: Set env
         run: |
-          echo "VERSION=$(cat "version/trojan-r" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/trojan-r.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
       
       - name: Setup toolchain
@@ -51,7 +51,7 @@ jobs:
       
       - name: Set env
         run: |
-          echo "VERSION=$(cat "version/trojan-r" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/trojan-r.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Get Dockerfile
@@ -90,7 +90,7 @@ jobs:
       
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/trojan-r" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/trojan-r.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Test Docker image
