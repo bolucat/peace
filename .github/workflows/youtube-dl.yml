@@ -1,0 +1,47 @@
+on:
+  push:
+    paths:
+      - 'version/youtube-dl.txt'
+
+name: youtube-dl
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup variables
+        run: |
+          echo "FFMPEG=$(wget -qO- https://api.github.com/repos/BtbN/FFmpeg-Builds/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "YOUDL=$(wget -qO- https://api.github.com/repos/ytdl-org/youtube-dl/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/youtube-dl.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Start build
+        run: |
+          mkdir -p ffmpeg
+          pushd ffmpeg || exit 1
+          wget -qO- https://api.github.com/repos/BtbN/FFmpeg-Builds/releases/tags/${FFMPEG} | jq ".assets[] | {browser_download_url}" -c | jq .browser_download_url -r | grep -E ".ffmpeg-n.*.-gpl-[[:digit:]].[[:digit:]].zip" | wget -O ffmpeg.zip -i -
+          unzip ffmpeg.zip
+          mv ffmpeg-*/bin/*.exe .
+          popd || exit 1
+          mkdir -p release
+          pushd release || exit 1
+          wget -O youtube-dl.exe https://github.com/ytdl-org/youtube-dl/releases/download/${{ env.YOUDL }}/youtube-dl.exe
+          cp -r ../ffmpeg/*.exe .
+          zip -9 -r youtube-dl.zip *
+          popd || exit 1
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ env.VERSION }}
+          tag_name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: |
+            ./release/youtube-dl.zip
