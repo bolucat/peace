@@ -20,7 +20,7 @@ jobs:
       - name: Set variables
         run: |
           echo "VERSION=$(wget -qO- https://api.github.com/repos/bitwarden/web/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          echo "RELEASE_NAME=$(wget -qO- https://api.github.com/repos/dani-garcia/bitwarden_rs/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$(cat "version/bitwarden.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
         
       - name: Setup Node.js
