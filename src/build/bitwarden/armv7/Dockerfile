@@ -1,4 +1,4 @@
-FROM rust:1.50
+FROM rust:latest
 
 WORKDIR /root
 COPY bw.sh /root/bw.sh

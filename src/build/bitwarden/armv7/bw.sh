@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CUR=${PWD}
-BITWARDEN=$(wget -qO- https://api.github.com/repos/dani-garcia/bitwarden_rs/tags | grep 'name' | cut -d\" -f4 | head -1)
+BITWARDEN=$(wget -qO- https://api.github.com/repos/dani-garcia/vaultwarden/tags | grep 'name' | cut -d\" -f4 | head -1)
 
 DB="sqlite,mysql,postgresql"
 
@@ -23,7 +23,7 @@ export CC_armv7_unknown_linux_gnueabihf="/usr/bin/arm-linux-gnueabihf-gcc"
 export CROSS_COMPILE="1"
 export OPENSSL_INCLUDE_DIR="/usr/include/arm-linux-gnueabihf"
 export OPENSSL_LIB_DIR="/usr/lib/arm-linux-gnueabihf"
-git clone https://github.com/dani-garcia/bitwarden_rs bitwarden
+git clone https://github.com/dani-garcia/vaultwarden bitwarden
 pushd bitwarden || exit 1
 git checkout ${BITWARDEN}
 rustup component list --installed && rustup show
