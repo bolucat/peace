@@ -32,4 +32,4 @@ rustup target add aarch64-unknown-linux-gnu
 cargo build --features ${DB} --release --target=aarch64-unknown-linux-gnu
 find . -not -path "./target*" -delete
 popd || exit 1
-cp -r bitwarden/target/aarch64-unknown-linux-gnu/release/bitwarden_rs ./bitwarden_rs && rm -rf bitwarden
+cp -r bitwarden/target/aarch64-unknown-linux-gnu/release/vaultwarden ./vaultwarden && rm -rf bitwarden

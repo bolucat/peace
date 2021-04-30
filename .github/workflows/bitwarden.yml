@@ -58,25 +58,25 @@ jobs:
             amd64)
               pushd src/build/bitwarden/amd64 || exit 1
               docker build -t pocat/bitwarden:amd64 .
-              docker run --name bitwarden -d pocat/bitwarden:amd64 && docker cp bitwarden:/root/bitwarden_rs ./bitwarden-amd64
+              docker run --name bitwarden -d pocat/bitwarden:amd64 && docker cp bitwarden:/root/vaultwarden ./bitwarden-amd64
               popd || exit 1
               ;;
             arm64)
               pushd src/build/bitwarden/arm64 || exit 1
               docker build -t pocat/bitwarden:arm64 .
-              docker run --name bitwarden -d pocat/bitwarden:arm64 && docker cp bitwarden:/root/bitwarden_rs ./bitwarden-arm64
+              docker run --name bitwarden -d pocat/bitwarden:arm64 && docker cp bitwarden:/root/vaultwarden ./bitwarden-arm64
               popd || exit 1
               ;;
             armv6)
               pushd src/build/bitwarden/armv6 || exit 1
               docker build -t pocat/bitwarden:armv6 .
-              docker run --name bitwarden -d pocat/bitwarden:armv6 && docker cp bitwarden:/root/bitwarden_rs ./bitwarden-armv6
+              docker run --name bitwarden -d pocat/bitwarden:armv6 && docker cp bitwarden:/root/vaultwarden ./bitwarden-armv6
               popd || exit 1
               ;;
             armv7)
               pushd src/build/bitwarden/armv7 || exit 1
               docker build -t pocat/bitwarden:armv7 .
-              docker run --name bitwarden -d pocat/bitwarden:armv7 && docker cp bitwarden:/root/bitwarden_rs ./bitwarden-armv7
+              docker run --name bitwarden -d pocat/bitwarden:armv7 && docker cp bitwarden:/root/vaultwarden ./bitwarden-armv7
               popd || exit 1
               ;;
             *)
@@ -191,5 +191,5 @@ jobs:
 
       - name: Test Docker image
         run: |
-          docker run --rm --entrypoint /bitwarden ${{ secrets.DOCKER_USERNAME }}/bitwarden:latest --version
-          docker run --rm --entrypoint /bitwarden ${{ secrets.DOCKER_USERNAME }}/bitwarden:${{ env.VERSION }} --version
+          docker run --rm --entrypoint /vaultwarden ${{ secrets.DOCKER_USERNAME }}/bitwarden:latest --version
+          docker run --rm --entrypoint /vaultwarden ${{ secrets.DOCKER_USERNAME }}/bitwarden:${{ env.VERSION }} --version

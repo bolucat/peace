@@ -31,4 +31,4 @@ rustup target add armv7-unknown-linux-gnueabihf
 cargo build --features ${DB} --release --target=armv7-unknown-linux-gnueabihf
 find . -not -path "./target*" -delete
 popd || exit 1
-cp -r bitwarden/target/armv7-unknown-linux-gnueabihf/release/bitwarden_rs ./bitwarden_rs && rm -rf bitwarden
+cp -r bitwarden/target/armv7-unknown-linux-gnueabihf/release/vaultwarden ./vaultwarden && rm -rf bitwarden

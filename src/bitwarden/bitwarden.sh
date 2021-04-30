@@ -36,6 +36,6 @@ echo "Download binary file: ${BITWARDEN_FILE} completed"
 
 # Prepare
 tar -zxvf bitwarden.tar.gz && rm -rfv bitwarden.tar.gz
-mv bitwarden-${ARCH} ./bitwarden && tar -zxf web-vault.tar.gz
-rm -rfv web-vault.tar.gz && chmod +x ./bitwarden
+mv bitwarden-${ARCH} ./vaultwarden && tar -zxf web-vault.tar.gz
+rm -rfv web-vault.tar.gz && chmod +x ./vaultwarden
 echo "Done"

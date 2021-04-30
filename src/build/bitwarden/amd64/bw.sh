@@ -12,4 +12,4 @@ git checkout ${BITWARDEN}
 cargo build --features ${DB} --release
 find . -not -path "./target*" -delete
 popd || exit 1
-cp -r bitwarden/target/release/bitwarden_rs ./bitwarden_rs && rm -rf bitwarden
+cp -r bitwarden/target/release/vaultwarden ./vaultwarden && rm -rf bitwarden
