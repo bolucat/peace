@@ -14,7 +14,8 @@ RUN set -ex \
     && make \
     && make install \
     && cd /root \
-    && rm -rf mtr
+    && rm -rf mtr \
+    && apk del git automake autoconf pkgconfig libtool build-base
 
 ARG OPTIONS
 CMD mtr ${OPTIONS}

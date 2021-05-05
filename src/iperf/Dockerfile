@@ -14,7 +14,8 @@ RUN set -ex \
     && make \
     && make install \
     && cd /root \
-    && rm -rf iperf
+    && rm -rf iperf \
+    && apk del git automake autoconf pkgconfig libtool build-base
 
 ARG OPTIONS
 CMD iperf3 ${OPTIONS}
