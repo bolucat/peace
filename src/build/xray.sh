@@ -30,7 +30,7 @@ for ARCH in ${ARCHS[@]}; do
 done
 
 # Build Windows-amd64
-echo Building xray-windows-amd64" && cd ${CUR}/Xray-core
+echo "Building xray-windows-amd64" && cd ${CUR}/Xray-core
 env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/xray.exe -trimpath -ldflags "-s -w -buildid=" ./main
 cd ${CUR}/release && zip -9 -r xray-windows-amd64.zip *.exe geoip.dat geosite.dat && rm -rf *.exe
 
