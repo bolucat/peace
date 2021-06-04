@@ -1,4 +1,4 @@
-FROM --platform=${TARGETPLATFORM} alpine:latest
+FROM --platform=${TARGETPLATFORM} alpine:edge
 
 WORKDIR /root
 ARG TARGETPLATFORM
