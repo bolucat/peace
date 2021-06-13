@@ -16,4 +16,4 @@ RUN set -ex \
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
 	
-CMD [ "/usr/local/apache/bin/httpd", "-k", "start" ]
+CMD [ "/usr/local/apache/bin/httpd", "-DFOREGROUND" ]
