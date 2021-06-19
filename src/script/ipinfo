@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#
+# Credit : https://github.com/teddysun/across/blob/master/bench.sh
+
+_red() {
+    printf '\033[0;31;31m%b\033[0m' "$1"
+}
+
+_green() {
+    printf '\033[0;31;32m%b\033[0m' "$1"
+}
+
+_yellow() {
+    printf '\033[0;31;33m%b\033[0m' "$1"
+}
+
+_blue() {
+    printf '\033[0;31;36m%b\033[0m' "$1"
+}
+
+ipv4_info() {
+    local ip="$(wget -q -T10 -O- ipinfo.io/ip)"
+    local org="$(wget -q -T10 -O- ipinfo.io/org)"
+    local city="$(wget -q -T10 -O- ipinfo.io/city)"
+    local country="$(wget -q -T10 -O- ipinfo.io/country)"
+    local region="$(wget -q -T10 -O- ipinfo.io/region)"
+    [[ -n "$ip" ]] && echo " IP                    : $(_blue "$ip")"
+    [[ -n "$org" ]] && echo " Organization          : $(_blue "$org")"
+    [[ -n "$city" && -n "country" ]] && echo " Location              : $(_blue "$city / $country")"
+    [[ -n "$region" ]] && echo " Region                : $(_blue "$region")"
+}
+
+ipv4_info
