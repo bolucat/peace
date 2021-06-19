@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
 # Credit : https://github.com/teddysun/across/blob/master/bench.sh
+#
+# Usage : wget -qO- https://git.io/Jnudl | bash
 
 _red() {
     printf '\033[0;31;31m%b\033[0m' "$1"
