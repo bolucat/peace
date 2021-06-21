@@ -5,6 +5,40 @@ on:
 
 name: trojan
 jobs:
+  build-linux:
+    runs-on: ubuntu-20.04
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Set variables
+        run: |
+          echo "RELEASE_VERSION=$(cat "version/trojan.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(wget -qO- https://api.github.com/repos/trojan-gfw/trojan/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Start build
+        run: |
+          sudo apt-get install -y build-essential cmake libboost-system-dev libboost-program-options-dev libssl-dev default-libmysqlclient-dev
+          git clone https://github.com/trojan-gfw/trojan && cd trojan
+          mkdir -p Release && git checkout ${{ env.VERSION }}
+          cmake . && make
+          strip -s trojan && mv trojan Release/
+        shell : bash
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ env.RELEASE_VERSION }}
+          tag_name: ${{ env.RELEASE_VERSION }}
+          draft: false
+          prerelease: false
+          files: |
+            ./trojan/Release/*
+
   build-windows:
     runs-on: windows-latest
     steps:
