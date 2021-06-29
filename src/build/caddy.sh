@@ -9,7 +9,7 @@ go get -u github.com/caddyserver/xcaddy/cmd/xcaddy
 git clone -b naive https://github.com/klzgrad/forwardproxy
 git clone https://github.com/mholt/caddy-l4 caddy-l4
 git clone https://github.com/caddyserver/nginx-adapter
-git clone https://github.com/bolucat/cloudflare cloudflare
+git clone https://github.com/caddy-dns/cloudflare cloudflare
 git clone https://github.com/mholt/caddy-webdav caddy-webdav
 git clone -b ${QUIC} https://github.com/lucas-clemente/quic-go
 git clone -b ${PROTOCOL} https://github.com/mastercactapus/caddy2-proxyprotocol
