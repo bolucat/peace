@@ -32,6 +32,10 @@ for ARCH in ${ARCHS[@]}; do
 done
 
 # Build Windows-amd64
+rm -rf ${CUR}/release/{"geoip.dat","geosite.dat"}
+# Change to Loyalsoldier source when compile Windows packages
+wget -O release/geosite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+wget -O release/geoip.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
 echo "Building v2ray-windows-amd64" && cd ${CUR}/v2ray-core
 env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/v2ray.exe -trimpath -ldflags "-s -w -buildid=" ./main
 env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/wv2ray.exe -trimpath -ldflags "-s -w -H windowsgui -buildid=" ./main
