@@ -1,20 +1,18 @@
-FROM --platform=${TARGETPLATFORM} node:slim
+FROM --platform=${TARGETPLATFORM} node:current-alpine
 
 WORKDIR /root
 ARG TARGETPLATFORM
 
 RUN set -ex \
-    && apt-get update \ 
-    && apt-get install -y git wget autoconf dh-autoreconf \
+    && apk add --no-cache git wget tzdata \
+    make nasm autoconf automake libtool dpkg \
+    pkgconfig libpng libpng-dev g++ \
     && git clone https://github.com/mdn/content \
     && mv content/* /root \
     && rm -rf content \
     && npm --force install -g yarn \
     && yarn \
-    && apt-get purge -y git wget \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+    && apk del git wget make automake autoconf
 
 EXPOSE 5000
 VOLUME /root
