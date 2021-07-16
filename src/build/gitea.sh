@@ -2,7 +2,7 @@
 
 # Set variables
 CUR=$PWD
-VERSION=$(wget -qO- https://api.github.com/repos/go-gitea/gitea/releases/latest | grep 'tag_name' | cut -d\" -f4 | head -1)
+VERSION=$(wget -qO- https://api.github.com/repos/go-gitea/gitea/tags | grep 'name' | cut -d\" -f4 | head -1)
 
 # Start Build
 mkdir -p ${CUR}/release 
