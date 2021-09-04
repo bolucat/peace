@@ -5,7 +5,7 @@ QUIC=$(wget -qO- https://api.github.com/repos/lucas-clemente/quic-go/tags | grep
 PROTOCOL=$(wget -qO- https://api.github.com/repos/mastercactapus/caddy2-proxyprotocol/tags | grep 'name' | cut -d\" -f4 | head -1)
 
 # Get source code
-go get -u github.com/caddyserver/xcaddy/cmd/xcaddy
+go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 git clone -b naive https://github.com/klzgrad/forwardproxy
 git clone https://github.com/mholt/caddy-l4 caddy-l4
 git clone https://github.com/caddyserver/nginx-adapter
