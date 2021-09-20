@@ -30,6 +30,10 @@ for ARCH in ${ARCHS[@]}; do
 done
 
 # Build Windows-amd64
+rm -rf ${CUR}/release/{"geoip.dat","geosite.dat"}
+# Change to Loyalsoldier source when compile Windows packages
+wget -O ${CUR}/release/geoip.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+wget -O ${CUR}/release/geosite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
 echo "Building xray-windows-amd64" && cd ${CUR}/Xray-core
 env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/xray.exe -trimpath -ldflags "-s -w -buildid=" ./main
 cd ${CUR}/release && zip -9 -r xray-windows-amd64.zip *.exe geoip.dat geosite.dat && rm -rf *.exe
