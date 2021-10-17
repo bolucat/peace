@@ -30,6 +30,10 @@ jobs:
           mkdir -p release
           pushd release || exit 1
           wget -O youtube-dl.exe https://github.com/ytdl-org/youtube-dl/releases/download/${{ env.YOUDL }}/youtube-dl.exe
+          ARIA2=$(wget -qO- https://api.github.com/repos/aria2/aria2/releases/latest | jq ".assets[] | {name}" -c | jq .name -r | grep "win-64bit" | sed "s/.zip//g")
+          wget -qO- https://api.github.com/repos/aria2/aria2/releases/latest | jq ".assets[] | {browser_download_url}" -c | jq .browser_download_url -r | grep "win-64bit" | wget -O aria2.zip -q -i -
+          unzip -qq aria2.zip && mv ${ARIA2}/aria2c.exe .
+          rm -rf ${ARIA2} aria2.zip
           cp -r ../ffmpeg/*.exe .
           zip -9 -r youtube-dl.zip *
           popd || exit 1
