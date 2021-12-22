@@ -53,7 +53,7 @@ jobs:
         shell: bash
         
       - name: Install boost
-        uses: MarkusJx/install-boost@v2.0.0
+        uses: MarkusJx/install-boost@v2.1.0
         id: install-boost
         with:
           # Using Supported Boost Version Below (with msvc on Windows)
