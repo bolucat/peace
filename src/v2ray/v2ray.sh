@@ -47,6 +47,5 @@ echo "Prepare to use"
 unzip v2ray.zip && rm -rfv v2ray.zip
 chmod +x *-linux-${ARCH}
 mv v2ray-linux-${ARCH} /usr/bin/v2ray
-mv v2ctl-linux-${ARCH} /usr/bin/v2ctl
 mv geosite.dat geoip.dat /usr/local/share/v2ray/
 echo "Done"

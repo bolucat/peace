@@ -20,13 +20,11 @@ for ARCH in ${ARCHS[@]}; do
 		for ARM in ${ARMS[@]}; do
 			echo "Building v2ray-linux-${ARCH}32-v${ARM}" && cd ${CUR}/v2ray-core
 			env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} GOARM=${ARM} go build -o ${CUR}/release/v2ray-linux-${ARCH}32-v${ARM} -trimpath -ldflags "-s -w -buildid=" ./main
-            env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} GOARM=${ARM} go build -o ${CUR}/release/v2ctl-linux-${ARCH}32-v${ARM} -trimpath -ldflags "-s -w -buildid=" -tags confonly ./infra/control/main
 			cd ${CUR}/release && zip -9 -r v2ray-linux-${ARCH}32-v${ARM}.zip *-linux-${ARCH}32-v${ARM} geoip.dat geosite.dat && rm -rf *-linux-${ARCH}32-v${ARM}
 		done
 	else
 		echo "Building v2ray-linux-${ARCH}" && cd ${CUR}/v2ray-core
 		env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} go build -o ${CUR}/release/v2ray-linux-${ARCH} -trimpath -ldflags "-s -w -buildid=" ./main
-        env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} go build -o ${CUR}/release/v2ctl-linux-${ARCH} -trimpath -ldflags "-s -w -buildid=" -tags confonly ./infra/control/main
 		cd ${CUR}/release && zip -9 -r v2ray-linux-${ARCH}.zip *-linux-${ARCH} geoip.dat geosite.dat && rm -rf *-linux-${ARCH}
 	fi
 done
@@ -38,8 +36,6 @@ wget -O ${CUR}/release/geoip.dat https://github.com/Loyalsoldier/v2ray-rules-dat
 wget -O ${CUR}/release/geosite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
 echo "Building v2ray-windows-amd64" && cd ${CUR}/v2ray-core
 env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/v2ray.exe -trimpath -ldflags "-s -w -buildid=" ./main
-env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/wv2ray.exe -trimpath -ldflags "-s -w -H windowsgui -buildid=" ./main
-env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/v2ctl.exe -trimpath -ldflags "-s -w -buildid=" -tags confonly ./infra/control/main
 cd ${CUR}/release && zip -9 -r v2ray-windows-amd64.zip *.exe geoip.dat geosite.dat && rm -rf *.exe
 
 rm -rf ${CUR}/release/{"geoip.dat","geosite.dat"}

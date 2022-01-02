@@ -13,4 +13,4 @@ RUN set -ex \
 	&& rm -rfv /root/v2ray.sh
 
 VOLUME /etc/v2ray
-CMD [ "/usr/bin/v2ray", "-config", "/etc/v2ray/config.json" ]
+CMD [ "/usr/bin/v2ray", "run", "-config", "/etc/v2ray/config.json" ]

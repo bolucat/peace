@@ -13,4 +13,4 @@ RUN set -ex \
 	&& rm -rfv /root/xray.sh
 
 VOLUME /etc/xray
-CMD [ "/usr/bin/xray", "-config", "/etc/xray/config.json" ]
+CMD [ "/usr/bin/xray", "run", "-config", "/etc/xray/config.json" ]
