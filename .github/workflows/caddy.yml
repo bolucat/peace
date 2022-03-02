@@ -10,7 +10,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup variables
         run: |
@@ -47,7 +47,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
       
       - name: Setup variables
         run: |
@@ -86,7 +86,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
       
       - name: Setup variables
         run: |
