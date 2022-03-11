@@ -1,9 +1,9 @@
 on:
   push:
     paths:
-      - 'version/youtube-dl.txt'
+      - 'version/yt-dlp.txt'
 
-name: youtube-dl
+name: yt-dlp
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "FFMPEG=$(wget -qO- https://api.github.com/repos/BtbN/FFmpeg-Builds/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
           echo "YOUDL=$(wget -qO- https://api.github.com/repos/yt-dlp/yt-dlp/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          echo "VERSION=$(cat "version/youtube-dl.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/yt-dlp.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Start build
@@ -29,13 +29,13 @@ jobs:
           popd || exit 1
           mkdir -p release
           pushd release || exit 1
-          wget -O youtube-dl.exe https://github.com/yt-dlp/yt-dlp/releases/download/${{ env.YOUDL }}/yt-dlp.exe
+          wget -O yt-dlp.exe https://github.com/yt-dlp/yt-dlp/releases/download/${{ env.YOUDL }}/yt-dlp.exe
           ARIA2=$(wget -qO- https://api.github.com/repos/aria2/aria2/releases/latest | jq ".assets[] | {name}" -c | jq .name -r | grep "win-64bit" | sed "s/.zip//g")
           wget -qO- https://api.github.com/repos/aria2/aria2/releases/latest | jq ".assets[] | {browser_download_url}" -c | jq .browser_download_url -r | grep "win-64bit" | wget -O aria2.zip -q -i -
           unzip -qq aria2.zip && mv ${ARIA2}/aria2c.exe .
           rm -rf ${ARIA2} aria2.zip
           cp -r ../ffmpeg/*.exe .
-          zip -9 -r youtube-dl.zip *
+          zip -9 -r yt-dlp.zip *
           popd || exit 1
 
       - name: Release
@@ -48,4 +48,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ./release/youtube-dl.zip
+            ./release/yt-dlp.zip
