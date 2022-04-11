@@ -19,7 +19,7 @@ jobs:
         shell: bash
 
       - name: Install Golang
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with: 
           go-version: ${{ env.GOLANG }}
 
