@@ -116,7 +116,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/naiveproxy:latest
             ${{ secrets.DOCKER_USERNAME }}/naiveproxy:${{ env.VERSION }}
 
-    push-uot:
+  push-uot:
     needs: build-uot
     runs-on: ubuntu-20.04
     steps:
