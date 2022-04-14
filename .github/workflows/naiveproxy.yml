@@ -222,7 +222,7 @@ jobs:
             mkdir -p release && mv naiveproxy-* release && tar -zvcf release.tar.gz release
 
         - name: Release
-          uses: actions/upload-artifact@v2
+          uses: actions/upload-artifact@v3
           with:
             name: ${{ env.TAGS }}
             path: release.tar.gz
