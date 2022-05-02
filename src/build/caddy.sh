@@ -6,7 +6,7 @@ PROTOCOL=$(wget -qO- https://api.github.com/repos/mastercactapus/caddy2-proxypro
 
 # Get source code
 go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
-git clone -b naive https://github.com/klzgrad/forwardproxy
+git clone -b naive https://github.com/bolucat/forwardproxy
 git clone https://github.com/mholt/caddy-l4 caddy-l4
 # git clone https://github.com/caddyserver/nginx-adapter
 git clone https://github.com/caddy-dns/cloudflare cloudflare
