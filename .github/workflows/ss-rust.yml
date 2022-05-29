@@ -83,7 +83,7 @@ jobs:
               ;;
           esac
           popd || exit 1
-          mkdir -p release
+          mkdir -p release prepare
           case ${TARGET} in
             x86_64-unknown-linux-musl)
               ARCH=amd64
@@ -101,7 +101,12 @@ jobs:
               echo "Error occurred" && exit 1
               ;;
           esac
-          zip -9 -r release/ss-rust-linux-${ARCH}.zip ss-rust/target/${TARGET}/release/{sslocal,ssmanager,ssserver,ssservice,ssurl} v2ray-plugin/v2ray-plugin-${ARCH}
+          mv ss-rust/target/${TARGET}/release/{sslocal,ssmanager,ssserver,ssservice,ssurl} prepare/
+          mv v2ray-plugin/v2ray-plugin-${ARCH} prepare/
+          pushd prepare || exit 1
+          zip -9 -r ss-rust-linux-${ARCH}.zip *
+          popd || exit 1
+          mv prepare/ss-rust-linux-${ARCH}.zip release/
 
       - name: Release
         uses: softprops/action-gh-release@v1
