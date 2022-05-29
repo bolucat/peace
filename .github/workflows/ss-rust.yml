@@ -1,0 +1,173 @@
+on:
+  push:
+    paths:
+      - 'version/ss-rust.txt'
+
+name: ss-rust
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      CARGO_TERM_COLOR: always
+      RUST_BACKTRACE: full
+    strategy:
+      matrix:
+        target:
+          - x86_64-unknown-linux-musl
+          - arm-unknown-linux-musleabi
+          - armv7-unknown-linux-musleabihf
+          - aarch64-unknown-linux-musl
+      fail-fast: false
+    
+    steps:    
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup variables
+        run: |
+          echo "VERSION=$(cat "version/ss-rust.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "SSR=$(wget -qO- https://api.github.com/repos/shadowsocks/shadowsocks-rust/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "V2PL=$(wget -qO- https://api.github.com/repos/teddysun/v2ray-plugin/tags | grep 'name' | cut -d\" -f4 | sort -r | head -1)" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          target: ${{ matrix.target }}
+          toolchain: nightly
+          default: true
+          override: true
+
+      - name: Install Golang
+        uses: actions/setup-go@v3
+        with: 
+          go-version: ${{ env.GOLANG }}
+
+      - name: Install cross
+        run: |
+          cargo install cross
+
+      - name: Start build
+        run: |
+          TARGET=${{ matrix.target }}
+          git clone https://github.com/shadowsocks/shadowsocks-rust ss-rust
+          pushd ss-rust || exit 1
+          git checkout ${{ env.SSR }}
+          if [[ "${TARGET}" == "aarch64-unknown-linux-musl" ]]; then
+            FEATURES="local-redir local-tun armv8 neon"
+          else
+            FEATURES="local-redir local-tun"
+          fi
+          cross build --target "${TARGET}" --features "${FEATURES}" --release
+          popd || exit 1
+          git clone https://github.com/teddysun/v2ray-plugin v2ray-plugin
+          pushd v2ray-plugin || exit 1
+          git checkout ${{ env.V2PL }}
+          case ${TARGET} in
+            x86_64-unknown-linux-musl)
+              env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -trimpath -ldflags "-X main.VERSION=${{ env.V2PL }} -s -w -buildid=" -o v2ray-plugin-amd64
+              ;;
+            arm-unknown-linux-musleabi)
+              env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -v -trimpath -ldflags "-X main.VERSION=${{ env.V2PL }} -s -w -buildid=" -o v2ray-plugin-arm32-v6
+              ;;
+            armv7-unknown-linux-musleabihf)
+              env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -v -trimpath -ldflags "-X main.VERSION=${{ env.V2PL }} -s -w -buildid=" -o v2ray-plugin-arm32-v7
+              ;;
+            aarch64-unknown-linux-musl)
+              env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -v -trimpath -ldflags "-X main.VERSION=${{ env.V2PL }} -s -w -buildid=" -o v2ray-plugin-arm64
+              ;;
+            *)
+              echo "Error occurred" && exit 1
+              ;;
+          esac
+          popd || exit 1
+          mkdir -p release
+          case ${TARGET} in
+            x86_64-unknown-linux-musl)
+              ARCH=amd64
+              ;;
+            arm-unknown-linux-musleabi)
+              ARCH=arm32-v6
+              ;;
+            armv7-unknown-linux-musleabihf)
+              ARCH=arm32-v7
+              ;;
+            aarch64-unknown-linux-musl)
+              ARCH=arm64
+              ;;
+            *)
+              echo "Error occurred" && exit 1
+              ;;
+          esac
+          zip -9 -r release/ss-rust-linux-${ARCH}.zip ss-rust/target/${TARGET}/release/{sslocal,ssmanager,ssserver,ssservice,ssurl} v2ray-plugin/v2ray-plugin-${ARCH}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ env.VERSION }}
+          tag_name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: |
+            ./release/*
+
+  push:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup variables
+        run: |
+          echo "VERSION=$(cat "version/ss-rust.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Get Dockerfile
+        run: |
+          cp src/ss-rust/* $PWD
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2.0.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2.0.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build latest
+        uses: docker/build-push-action@v3.0.0
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/ss-rust:latest
+            ${{ secrets.DOCKER_USERNAME }}/ss-rust:${{ env.VERSION }}
+
+  test:
+    needs: push
+    runs-on: ubuntu-20.04
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup variables
+        run: |
+          echo "VERSION=$(cat "version/ss-rust.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Test Docker image
+        run: |
+          docker run --rm --entrypoint /usr/bin/ssserver ${{ secrets.DOCKER_USERNAME }}/ss-rust:latest --version
+          docker run --rm --entrypoint /usr/bin/ssserver ${{ secrets.DOCKER_USERNAME }}/ss-rust:${{ env.VERSION }} --version
