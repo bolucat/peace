@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Only for Debian 11.0
+# Only for Debian 10.0 and 11.0
 
 VERSION=$1
 
@@ -15,7 +15,7 @@ if [ -f /etc/os-release ]; then
     export SYSTEM=$(awk -F'[= "]' '/PRETTY_NAME/{print $3}' /etc/os-release | cut -d ' ' -f1)
     if [ "$SYSTEM" == "Debian" ]; then
         export VERSION=$(awk -F'[= "]' '/VERSION_ID/{print $3}' /etc/os-release)
-        if [ "$VERSION" == "11" ]; then
+        if [[ "$VERSION" == "11" || "$VERSION" == "10" ]]; then
             sudo apt install -y wget aria2 > /dev/null 2>&1
             if [ $? -ne 0 ]; then
                 echo -e "[${red}Error${plain}] Please install wget and aria2 first!"
