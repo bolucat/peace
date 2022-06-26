@@ -60,7 +60,7 @@ jobs:
       - name: Ready to release
         run: |
           mkdir -p release 7zip
-          wget "https://www.7-zip.org/a/7z2107-linux-x64.tar.xz" -O 7zip/7zip.tar.xz
+          wget "https://www.7-zip.org/a/7z2200-linux-x64.tar.xz" -O 7zip/7zip.tar.xz
           tar -xvf 7zip/7zip.tar.xz -C 7zip/ && mv 7zip/7zz .
           rm -rf 7zip && chmod +x 7zz
           case ${{ matrix.cpu }} in
