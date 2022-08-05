@@ -4,7 +4,7 @@
 
 VERSION=$1
 
-[ -z "$VERSION" ] && VERSION="1.19.1"
+[ -z "$VERSION" ] && VERSION="1.19.2"
 
 red='\033[0;31m'
 plain='\033[0m'
