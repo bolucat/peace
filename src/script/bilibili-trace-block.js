@@ -2,6 +2,7 @@
 // @name        Bilibili Trace Block
 // @namespace   https://raw.githubusercontent.com/bolucat/peace/master/src/script/bilibili-trace-block.js
 // @match       *://*.bilibili.com/*
+// @exclude     *://search.bilibili.com/*
 // @run-at      document-start
 // @grant       unsafeWindow
 // @version     0.1
