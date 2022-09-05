@@ -8,6 +8,8 @@
 // @version     0.1
 // @author      Bolucat
 // @description Block Bilibili Trace
+// For uBlock Origin or AdBlock Plus, add this filter manually:
+// ||s1.hdslb.com/bfs/static/jinkela/long/js/sentry^
 // ==/UserScript==
 
 (function() {
