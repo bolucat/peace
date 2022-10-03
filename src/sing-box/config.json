@@ -1,0 +1,25 @@
+{
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "output": "/var/log/sing-box/sing-box.log",
+    "timestamp": true
+  },
+  "inbounds": [
+    {
+      "type": "shadowsocks",
+      "listen": "::",
+      "listen_port": 8080,
+      "method": "2022-blake3-aes-128-gcm",
+      "password": "8JCsPssfgS8tiRwiMlhARg=="
+    }
+  ],
+  "route": {
+    "geoip": {
+      "path": "geoip.db"
+    },
+    "geosite": {
+      "path": "geosite.db"
+    }
+  }
+}
