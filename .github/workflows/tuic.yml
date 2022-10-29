@@ -26,7 +26,6 @@ jobs:
       - name: Setup variables
         run: |
           echo "VERSION=$(cat "version/tuic.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
-          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
           echo "TUIC=$(wget -qO- https://api.github.com/repos/EAimTY/tuic/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
 
@@ -39,11 +38,12 @@ jobs:
 
       - name: Start build
         run: |
+          cargo install cross
           TARGET=${{ matrix.target }}
           git clone https://github.com/EAimTY/tuic tuic
           pushd tuic || exit 1
           git checkout ${{ env.TUIC }}
-          cargo build --release -p tuic-server --target ${{ matrix.target }}
+          cross build --release -p tuic-server --target ${{ matrix.target }}
           popd || exit 1
           mkdir -p release
           case ${TARGET} in
