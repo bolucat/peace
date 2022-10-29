@@ -1,0 +1,135 @@
+on:
+  push:
+    paths:
+      - 'version/tuic.txt'
+
+name: tuic
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      CARGO_TERM_COLOR: always
+      RUST_BACKTRACE: full
+    strategy:
+      matrix:
+        target:
+          - x86_64-unknown-linux-musl
+          - arm-unknown-linux-musleabi
+          - armv7-unknown-linux-musleabihf
+          - aarch64-unknown-linux-musl
+      fail-fast: false
+    
+    steps:    
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup variables
+        run: |
+          echo "VERSION=$(cat "version/tuic.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "TUIC=$(wget -qO- https://api.github.com/repos/EAimTY/tuic/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          target: ${{ matrix.target }}
+          toolchain: stable
+          override: true
+
+      - name: Start build
+        run: |
+          TARGET=${{ matrix.target }}
+          git clone https://github.com/EAimTY/tuic tuic
+          pushd tuic || exit 1
+          git checkout ${{ env.TUIC }}
+          cargo build --release -p tuic-server --target ${{ matrix.target }}
+          popd || exit 1
+          mkdir -p release
+          case ${TARGET} in
+            x86_64-unknown-linux-musl)
+              ARCH=amd64
+              ;;
+            arm-unknown-linux-musleabi)
+              ARCH=arm32-v6
+              ;;
+            armv7-unknown-linux-musleabihf)
+              ARCH=arm32-v7
+              ;;
+            aarch64-unknown-linux-musl)
+              ARCH=arm64
+              ;;
+            *)
+              echo "Error occurred" && exit 1
+              ;;
+          esac
+          mv tuic/target/${TARGET}/release/tuic-server release/tuic-linux-${ARCH}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ env.VERSION }}
+          tag_name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: |
+            ./release/*
+
+  push:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup variables
+        run: |
+          echo "VERSION=$(cat "version/tuic.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Get Dockerfile
+        run: |
+          cp src/tuic/* $PWD
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2.1.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2.1.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build latest
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/tuic:latest
+            ${{ secrets.DOCKER_USERNAME }}/tuic:${{ env.VERSION }}
+
+  test:
+    needs: push
+    runs-on: ubuntu-20.04
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup variables
+        run: |
+          echo "VERSION=$(cat "version/tuic.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Test Docker image
+        run: |
+          docker run --rm --entrypoint /usr/bin/tuic ${{ secrets.DOCKER_USERNAME }}/tuic:latest --version
+          docker run --rm --entrypoint /usr/bin/tuic ${{ secrets.DOCKER_USERNAME }}/tuic:${{ env.VERSION }} --version
