@@ -32,12 +32,12 @@ for ARCH in ${ARCHS[@]}; do
     if [ "${ARCH}" == "arm" ]; then
         for ARM in ${ARMS[@]}; do
             echo "Building hysteria-linux-${ARCH}32-v${ARM}" && cd ${CUR}/hysteria
-            env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} GOARM=${ARM} go build -o ${CUR}/release/hysteria-linux-${ARCH}32-v${ARM} -trimpath -ldflags "${LDFLAGS}"
+            env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} GOARM=${ARM} go build -o ${CUR}/release/hysteria-linux-${ARCH}32-v${ARM} -trimpath -ldflags "${LDFLAGS}" ./cmd
             cd ${CUR}/release && zip -9 -r hysteria-linux-${ARCH}32-v${ARM}.zip hysteria-linux-${ARCH}32-v${ARM} GeoLite2-Country.mmdb && rm -rf hysteria-linux-${ARCH}32-v${ARM}
         done
     else
         echo "Building hysteria-linux-${ARCH}" && cd ${CUR}/hysteria
-        env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} go build -o ${CUR}/release/hysteria-linux-${ARCH} -trimpath -ldflags "${LDFLAGS}"
+        env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} go build -o ${CUR}/release/hysteria-linux-${ARCH} -trimpath -ldflags "${LDFLAGS}" ./cmd
         cd ${CUR}/release && zip -9 -r hysteria-linux-${ARCH}.zip hysteria-linux-${ARCH} GeoLite2-Country.mmdb && rm -rf hysteria-linux-${ARCH}
     fi
 done
