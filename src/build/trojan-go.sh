@@ -1,14 +1,16 @@
+#!/bin/bash
+
 # Set variables
 CUR=$PWD
-version=$(wget -qO- https://api.github.com/repos/p4gefau1t/trojan-go/tags | grep 'name' | cut -d\" -f4 | head -1)
+RELEASE_VER=$(wget -qO- https://api.github.com/repos/p4gefau1t/trojan-go/tags | grep 'name' | cut -d\" -f4 | head -1)
 
 # Get source code
 mkdir -p release
 wget -O release/geosite.dat https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
 wget -O release/geoip.dat https://github.com/v2fly/geoip/releases/latest/download/geoip.dat
 
-git clone https://github.com/p4gefau1t/trojan-go.git && cd trojan-go
-git checkout ${version}
+git clone https://github.com/p4gefau1t/trojan-go trojan-go
+cd trojan-go && git checkout ${RELEASE_VER}
 
 PACKAGE_NAME="github.com/p4gefau1t/trojan-go"
 VERSION="$(git describe)"
