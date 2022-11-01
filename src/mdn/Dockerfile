@@ -12,7 +12,7 @@ RUN set -ex \
     && rm -rf content \
     && npm --force install -g yarn \
     && yarn \
-    && echo "SERVER_PORT=5000" >> .env
+    && echo "SERVER_PORT=5000" >> .env \
     && apk del git wget make automake autoconf
 
 EXPOSE 5000
