@@ -26,13 +26,13 @@ jobs:
         run: |
           echo "VERSION=$(cat "version/naiveproxy.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          # echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
         
-      - name: Install Golang
-        uses: actions/setup-go@v3
-        with: 
-          go-version: ${{ env.GOLANG }}
+      # - name: Install Golang
+      #   uses: actions/setup-go@v3
+      #   with: 
+      #     go-version: ${{ env.GOLANG }}
 
       - name: Build
         run: |
@@ -52,41 +52,41 @@ jobs:
           ./get-clang.sh
           ./build.sh
           popd || exit 1
-          pushd naiveproxy/src/out/Release/cronet || exit 1
-          chmod +x *.sh
-          CCACHE_DISABLE=1 ./go-build.sh
-          popd || exit 1
+          # pushd naiveproxy/src/out/Release/cronet || exit 1
+          # chmod +x *.sh
+          # CCACHE_DISABLE=1 ./go-build.sh
+          # popd || exit 1
 
       - name: Ready to release
         run: |
-          mkdir -p release 7zip
-          wget "https://www.7-zip.org/a/7z2201-linux-x64.tar.xz" -O 7zip/7zip.tar.xz
-          tar -xvf 7zip/7zip.tar.xz -C 7zip/ && mv 7zip/7zz .
-          rm -rf 7zip && chmod +x 7zz
+          mkdir -p release #7zip
+          # wget "https://www.7-zip.org/a/7z2201-linux-x64.tar.xz" -O 7zip/7zip.tar.xz
+          # tar -xvf 7zip/7zip.tar.xz -C 7zip/ && mv 7zip/7zz .
+          # rm -rf 7zip && chmod +x 7zz
           case ${{ matrix.cpu }} in
             x86)
               mv naiveproxy/src/out/Release/naive release/naive-linux-386
-              mv naiveproxy/src/out/Release/cronet release/naive-cronet-linux-386
-              ./7zz a -m0=lzma2 -mx9 release/naive-cronet-linux-386.7z release/naive-cronet-linux-386
-              rm -rf release/naive-cronet-linux-386
+              # mv naiveproxy/src/out/Release/cronet release/naive-cronet-linux-386
+              # ./7zz a -m0=lzma2 -mx9 release/naive-cronet-linux-386.7z release/naive-cronet-linux-386
+              # rm -rf release/naive-cronet-linux-386
               ;;
             x64)
               mv naiveproxy/src/out/Release/naive release/naive-linux-amd64
-              mv naiveproxy/src/out/Release/cronet release/naive-cronet-linux-amd64
-              ./7zz a -m0=lzma2 -mx9 release/naive-cronet-linux-amd64.7z release/naive-cronet-linux-amd64
-              rm -rf release/naive-cronet-linux-amd64
+              # mv naiveproxy/src/out/Release/cronet release/naive-cronet-linux-amd64
+              # ./7zz a -m0=lzma2 -mx9 release/naive-cronet-linux-amd64.7z release/naive-cronet-linux-amd64
+              # rm -rf release/naive-cronet-linux-amd64
               ;;
             arm)
               mv naiveproxy/src/out/Release/naive release/naive-linux-arm32-v7
-              mv naiveproxy/src/out/Release/cronet release/naive-cronet-linux-arm32-v7
-              ./7zz a -m0=lzma2 -mx9 release/naive-cronet-linux-arm32-v7.7z release/naive-cronet-linux-arm32-v7
-              rm -rf release/naive-cronet-linux-arm32-v7
+              # mv naiveproxy/src/out/Release/cronet release/naive-cronet-linux-arm32-v7
+              # ./7zz a -m0=lzma2 -mx9 release/naive-cronet-linux-arm32-v7.7z release/naive-cronet-linux-arm32-v7
+              # rm -rf release/naive-cronet-linux-arm32-v7
               ;;
             arm64)
               mv naiveproxy/src/out/Release/naive release/naive-linux-arm64
-              mv naiveproxy/src/out/Release/cronet release/naive-cronet-linux-arm64
-              ./7zz a -m0=lzma2 -mx9 release/naive-cronet-linux-arm64.7z release/naive-cronet-linux-arm64
-              rm -rf release/naive-cronet-linux-arm64
+              # mv naiveproxy/src/out/Release/cronet release/naive-cronet-linux-arm64
+              # ./7zz a -m0=lzma2 -mx9 release/naive-cronet-linux-arm64.7z release/naive-cronet-linux-arm64
+              # rm -rf release/naive-cronet-linux-arm64
               ;;
             *)
               echo "Error occurred" && exit 1
@@ -132,13 +132,13 @@ jobs:
         run: |
           echo "VERSION=$(cat "version/naiveproxy.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          # echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
         
-      - name: Install Golang
-        uses: actions/setup-go@v3
-        with: 
-          go-version: ${{ env.GOLANG }}
+      # - name: Install Golang
+      #   uses: actions/setup-go@v3
+      #   with: 
+      #     go-version: ${{ env.GOLANG }}
 
       - name: Build
         run: |
@@ -152,10 +152,10 @@ jobs:
           ./get-clang.sh
           ./build.sh
           popd || exit 1
-          pushd naiveproxy/src/out/Release/cronet || exit 1
-          chmod +x *.sh
-          CCACHE_DISABLE=1 ./go-build.sh
-          popd || exit 1
+          # pushd naiveproxy/src/out/Release/cronet || exit 1
+          # chmod +x *.sh
+          # CCACHE_DISABLE=1 ./go-build.sh
+          # popd || exit 1
 
       - name: Ready to release
         run: |
@@ -163,21 +163,21 @@ jobs:
           case ${{ matrix.cpu }} in
             x86)
               mv naiveproxy/src/out/Release/naive release/naive-windows-386.exe
-              mv naiveproxy/src/out/Release/cronet release/naive-cronet-windows-386
-              7z a -m0=lzma2 -mx9 release/naive-cronet-windows-386.7z release/naive-cronet-windows-386
-              rm -rf release/naive-cronet-windows-386
+              # mv naiveproxy/src/out/Release/cronet release/naive-cronet-windows-386
+              # 7z a -m0=lzma2 -mx9 release/naive-cronet-windows-386.7z release/naive-cronet-windows-386
+              # rm -rf release/naive-cronet-windows-386
               ;;
             x64)
               mv naiveproxy/src/out/Release/naive release/naive-windows-amd64.exe
-              mv naiveproxy/src/out/Release/cronet release/naive-cronet-windows-amd64
-              7z a -m0=lzma2 -mx9 release/naive-cronet-windows-amd64.7z release/naive-cronet-windows-amd64
-              rm -rf release/naive-cronet-windows-amd64
+              # mv naiveproxy/src/out/Release/cronet release/naive-cronet-windows-amd64
+              # 7z a -m0=lzma2 -mx9 release/naive-cronet-windows-amd64.7z release/naive-cronet-windows-amd64
+              # rm -rf release/naive-cronet-windows-amd64
               ;;
             arm64)
               mv naiveproxy/src/out/Release/naive release/naive-windows-arm64.exe
-              mv naiveproxy/src/out/Release/cronet release/naive-cronet-windows-arm64
-              7z a -m0=lzma2 -mx9 release/naive-cronet-windows-arm64.7z release/naive-cronet-windows-arm64
-              rm -rf release/naive-cronet-windows-arm64
+              # mv naiveproxy/src/out/Release/cronet release/naive-cronet-windows-arm64
+              # 7z a -m0=lzma2 -mx9 release/naive-cronet-windows-arm64.7z release/naive-cronet-windows-arm64
+              # rm -rf release/naive-cronet-windows-arm64
               ;;
             *)
               echo "Error occurred" && exit 1
