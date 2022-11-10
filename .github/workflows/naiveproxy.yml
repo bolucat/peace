@@ -26,13 +26,13 @@ jobs:
         run: |
           echo "VERSION=$(cat "version/naiveproxy.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          # echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
         
-      # - name: Install Golang
-      #   uses: actions/setup-go@v3
-      #   with: 
-      #     go-version: ${{ env.GOLANG }}
+      - name: Install Golang
+        uses: actions/setup-go@v3
+        with: 
+          go-version: ${{ env.GOLANG }}
 
       - name: Build
         run: |
@@ -132,13 +132,13 @@ jobs:
         run: |
           echo "VERSION=$(cat "version/naiveproxy.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          # echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
         
-      # - name: Install Golang
-      #   uses: actions/setup-go@v3
-      #   with: 
-      #     go-version: ${{ env.GOLANG }}
+      - name: Install Golang
+        uses: actions/setup-go@v3
+        with: 
+          go-version: ${{ env.GOLANG }}
 
       - name: Build
         run: |
