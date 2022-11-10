@@ -47,5 +47,5 @@ echo "Prepare to use"
 unzip hysteria.zip && rm -rfv hysteria.zip
 chmod +x *-linux-${ARCH}
 mv hysteria-linux-${ARCH} /usr/bin/hysteria
-mv GeoLite2-Country.mmdb /etc/hysteria/GeoLite2-Country.mmdb
+mv GeoLite2-Country.mmdb /usr/bin/GeoLite2-Country.mmdb
 echo "Done"
