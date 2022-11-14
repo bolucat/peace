@@ -94,15 +94,15 @@ jobs:
           esac
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: ${{ env.VERSION }}
-          tag_name: ${{ env.VERSION }}
+          tag: ${{ env.VERSION }}
           draft: false
           prerelease: false
-          files: |
+          artifacts: |
             ./release/*
 
   build-windows:
@@ -185,15 +185,15 @@ jobs:
           esac
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: ${{ env.VERSION }}
-          tag_name: ${{ env.VERSION }}
+          tag: ${{ env.VERSION }}
           draft: false
           prerelease: false
-          files: |
+          artifacts: |
             ./release/*
 
   push:
@@ -267,11 +267,12 @@ jobs:
 
         - name: Start backup
           run: |
-            wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/releases/tags/${{ env.TAGS }} | jq ".assets[] | {browser_download_url}" -c | jq .browser_download_url -r | wget -i -
-            mkdir -p release && mv naiveproxy-* release && tar -zvcf release.tar.gz release
+            sudo apt install -y aria2
+            wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/releases/tags/${{ env.TAGS }} | jq ".assets[] | {browser_download_url}" -c | jq .browser_download_url -r | aria2c -c -x 8 -s 8 -j 1 -k 1M -i -
+            mkdir -p release && mv naiveproxy-* release
 
         - name: Release
           uses: actions/upload-artifact@v3
           with:
             name: ${{ env.TAGS }}
-            path: release.tar.gz
+            path: ./release

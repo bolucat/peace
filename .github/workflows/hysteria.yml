@@ -28,15 +28,15 @@ jobs:
           cp src/build/hysteria.sh $PWD/hysteria.sh && chmod +x hysteria.sh && ./hysteria.sh
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: ${{ env.VERSION }}
-          tag_name: ${{ env.VERSION }}
+          tag: ${{ env.VERSION }}
           draft: false
           prerelease: false
-          files: |
+          artifacts: |
             ./release/*
 
   push:

@@ -30,15 +30,15 @@ jobs:
           cp src/build/caddy.sh $PWD/caddy.sh && chmod +x caddy.sh && ./caddy.sh
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: ${{ env.VERSION }}
-          tag_name: ${{ env.VERSION }}
+          tag: ${{ env.VERSION }}
           draft: false
           prerelease: false
-          files: |
+          artifacts: |
             ./release/*
 
   build-uot:
@@ -66,15 +66,15 @@ jobs:
           cp src/build/caddy-uot.sh $PWD/caddy-uot.sh && chmod +x caddy-uot.sh && ./caddy-uot.sh
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: ${{ env.VERSION }}
-          tag_name: ${{ env.VERSION }}
+          tag: ${{ env.VERSION }}
           draft: false
           prerelease: false
-          files: |
+          artifacts: |
             ./release/*
 
   push:
