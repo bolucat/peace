@@ -9,7 +9,8 @@ mkdir -p release
 wget -O release/geosite.dat https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
 wget -O release/geoip.dat https://github.com/v2fly/geoip/releases/latest/download/geoip.dat
 
-git clone -b ${VERSION} https://github.com/v2fly/v2ray-core.git && cd v2ray-core
+git clone https://github.com/v2fly/v2ray-core v2ray-core
+cd v2ray-core && git checkout ${VERSION}
 
 # Start Build
 ARCHS=( 386 amd64 arm arm64 ppc64le s390x )

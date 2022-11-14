@@ -9,7 +9,8 @@ mkdir -p release
 wget -O release/geosite.dat https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
 wget -O release/geoip.dat https://github.com/v2fly/geoip/releases/latest/download/geoip.dat
 
-git clone -b ${VERSION} https://github.com/XTLS/Xray-core.git && cd Xray-core
+git clone https://github.com/XTLS/Xray-core Xray-core
+cd Xray-core && git checkout ${VERSION}
 
 # Start Build
 ARCHS=( 386 amd64 arm arm64 ppc64le s390x )
