@@ -10,6 +10,7 @@ RUN set -ex \
     && git clone https://github.com/mdn/content \
     && mv content/* /root \
     && rm -rf content \
+    && npm install -g npm@latest \
     && npm --force install -g yarn \
     && yarn \
     && echo "SERVER_PORT=5000" >> .env \
