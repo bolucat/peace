@@ -6,7 +6,7 @@ on:
 name: tuic
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       CARGO_TERM_COLOR: always
       RUST_BACKTRACE: full
@@ -79,7 +79,7 @@ jobs:
 
   push:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       
       - name: Checkout
@@ -118,7 +118,7 @@ jobs:
 
   test:
     needs: push
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       
       - name: Checkout

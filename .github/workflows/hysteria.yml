@@ -6,7 +6,7 @@ on:
 name: hysteria
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       
       - name: Checkout
@@ -41,7 +41,7 @@ jobs:
 
   push:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
 
       - name: Checkout
@@ -80,7 +80,7 @@ jobs:
 
   test:
     needs: [build,push]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
 
       - name: Checkout

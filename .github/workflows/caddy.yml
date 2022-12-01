@@ -6,7 +6,7 @@ on:
 name: caddy
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       
       - name: Checkout
@@ -42,7 +42,7 @@ jobs:
             ./release/*
 
   build-uot:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       
       - name: Checkout
@@ -79,7 +79,7 @@ jobs:
 
   push:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       
       - name: Checkout
@@ -118,7 +118,7 @@ jobs:
 
   push-uot:
     needs: build-uot
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       
       - name: Checkout
@@ -157,7 +157,7 @@ jobs:
 
   test:
     needs: [push,push-uot]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       
       - name: Checkout

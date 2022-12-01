@@ -14,7 +14,7 @@ jobs:
         cpu: [x86, x64, arm, arm64]
       fail-fast: false
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       EXTRA_FLAGS: target_cpu="${{ matrix.cpu }}"
     steps:
@@ -105,13 +105,13 @@ jobs:
           artifacts: |
             ./release/*
 
-  build-windows:
+  build-windows:ubuntu-22.04
     strategy:
       matrix:
         cpu: [x86, x64, arm64]
       fail-fast: false
 
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       EXTRA_FLAGS: target_cpu="${{ matrix.cpu }}"
     steps:
@@ -198,7 +198,7 @@ jobs:
 
   push:
     needs: build-linux
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
 
       - name: Checkout
@@ -237,7 +237,7 @@ jobs:
            
   test:
      needs: [build-linux,push]
-     runs-on: ubuntu-20.04
+     runs-on: ubuntu-22.04
      steps:
        
       - name: Checkout
@@ -254,7 +254,7 @@ jobs:
           docker run --rm --entrypoint /usr/bin/naive ${{ secrets.DOCKER_USERNAME }}/naiveproxy:${{ env.VERSION }} --version
 
   backup:
-      runs-on: ubuntu-20.04
+      runs-on: ubuntu-22.04
       steps:
 
         - name: Checkout
