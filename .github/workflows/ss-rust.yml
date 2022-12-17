@@ -56,7 +56,8 @@ jobs:
           pushd ss-rust || exit 1
           git checkout ${{ env.SSR }}
           if [[ "${TARGET}" == "aarch64-unknown-linux-musl" ]]; then
-            FEATURES="local-redir local-tun armv8 neon"
+            FEATURES="local-redir local-tun"
+            # FEATURES="local-redir local-tun armv8 neon" only for nightly
           else
             FEATURES="local-redir local-tun"
           fi
