@@ -47,5 +47,6 @@ jobs:
           tag: ${{ env.VERSION }}
           draft: false
           prerelease: false
+          allowUpdates: true
           artifacts: |
             ./release/yt-dlp.zip
