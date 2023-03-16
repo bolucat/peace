@@ -41,7 +41,7 @@ jobs:
           override: true
 
       - name: Install Golang
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with: 
           go-version: ${{ env.GOLANG }}
 
