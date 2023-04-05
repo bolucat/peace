@@ -40,7 +40,7 @@ jobs:
           sudo apt install -y ninja-build pkg-config qemu-user ccache bubblewrap
           sudo apt purge -y libc6-i386
           sudo apt purge -y qemu-user-binfmt
-          wget "https://snapshot.debian.org/archive/debian/20220515T152741Z/pool/main/q/qemu/qemu-user-static_7.0%2Bdfsg-6_amd64.deb" -O qemu-user-static.deb
+          wget "https://github.com/bolucat/ninja/releases/download/qemu-user-static/qemu-user-static_7.0+dfsg-6_amd64.deb" -O qemu-user-static.deb
           sudo dpkg -i qemu-user-static.deb
           git clone https://github.com/klzgrad/naiveproxy naiveproxy
           pushd naiveproxy || exit 1
