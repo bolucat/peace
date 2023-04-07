@@ -9,7 +9,7 @@ mkdir -p release
 wget -O release/geosite.db https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db
 wget -O release/geoip.db https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db
 
-git clone -b dev https://github.com/SagerNet/sing-box sing-box
+git clone -b main-next https://github.com/SagerNet/sing-box sing-box
 pushd sing-box || exit 1
 git checkout ${VERSION}
 export COMMIT=$(git rev-parse --short HEAD)
