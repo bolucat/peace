@@ -1,4 +1,4 @@
-FROM --platform=${TARGETPLATFORM} node:16-alpine
+FROM --platform=${TARGETPLATFORM} node:18-alpine
 
 WORKDIR /root
 ARG TARGETPLATFORM
@@ -12,6 +12,7 @@ RUN set -ex \
     && rm -rf content \
     && npm install -g npm@latest \
     && npm --force install -g yarn \
+    && yarn config set network-timeout 600000 -g \
     && yarn \
     && echo "SERVER_PORT=5000" >> .env \
     && apk del git wget make automake autoconf
