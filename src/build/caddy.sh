@@ -33,10 +33,10 @@ for ARCH in ${ARCHS[@]}; do
 	if [ "${ARCH}" == "arm" ]; then
 		for ARM in ${ARMS[@]}; do
 			echo "Building caddy-linux-${ARCH}32-v${ARM}"
-			env GOOS=linux GOARCH=${ARCH} GOARM=${ARM} $GOPATH/bin/xcaddy build 4aa4f3ac70c682fb25db1283ea8516598528995a --output release/caddy-linux-${ARCH}32-v${ARM} ${NAIVE} ${LAYER_4} ${CF_DNS} ${WEBDAV}
+			env GOOS=linux GOARCH=${ARCH} GOARM=${ARM} $GOPATH/bin/xcaddy build --output release/caddy-linux-${ARCH}32-v${ARM} ${NAIVE} ${LAYER_4} ${CF_DNS} ${WEBDAV}
 		done
 	else
 		echo "Building caddy-linux-${ARCH}"
-		env GOOS=linux GOARCH=${ARCH} $GOPATH/bin/xcaddy build 4aa4f3ac70c682fb25db1283ea8516598528995a --output release/caddy-linux-${ARCH} ${NAIVE} ${LAYER_4} ${CF_DNS} ${WEBDAV}
+		env GOOS=linux GOARCH=${ARCH} $GOPATH/bin/xcaddy build --output release/caddy-linux-${ARCH} ${NAIVE} ${LAYER_4} ${CF_DNS} ${WEBDAV}
 	fi
 done
