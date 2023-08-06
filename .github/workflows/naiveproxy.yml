@@ -40,7 +40,7 @@ jobs:
           sudo apt install -y ninja-build pkg-config qemu-user ccache bubblewrap
           sudo apt purge -y libc6-i386
           sudo apt purge -y qemu-user-binfmt
-          wget "https://github.com/bolucat/ninja/releases/download/qemu-user-static/qemu-user-static_7.0+dfsg-6_amd64.deb" -O qemu-user-static.deb
+          wget "https://github.com/bolucat/ninja/releases/download/qemu-user-static/qemu-user-static_8.0+dfsg-4_amd64.deb" -O qemu-user-static.deb
           sudo dpkg -i qemu-user-static.deb
           git clone https://github.com/klzgrad/naiveproxy naiveproxy
           pushd naiveproxy || exit 1
@@ -48,6 +48,9 @@ jobs:
           git checkout ${{ env.NAIVE }}
           popd || exit 1
           pushd naiveproxy/src || exit 1
+          # Regenerate Debian keyring
+          rm -rf build/linux/sysroot_scripts/keyring.gpg
+          GPG_TTY=/dev/null build/linux/sysroot_scripts/generate_keyring.sh
           chmod +x *.sh
           ./get-clang.sh
           ./build.sh
@@ -60,7 +63,7 @@ jobs:
       - name: Ready to release
         run: |
           mkdir -p release #7zip
-          # wget "https://www.7-zip.org/a/7z2201-linux-x64.tar.xz" -O 7zip/7zip.tar.xz
+          # wget "https://www.7-zip.org/a/7z2301-linux-x64.tar.xz" -O 7zip/7zip.tar.xz
           # tar -xvf 7zip/7zip.tar.xz -C 7zip/ && mv 7zip/7zz .
           # rm -rf 7zip && chmod +x 7zz
           case ${{ matrix.cpu }} in
