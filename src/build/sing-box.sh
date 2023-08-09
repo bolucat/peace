@@ -24,19 +24,19 @@ for ARCH in ${ARCHS[@]}; do
 	if [ "${ARCH}" == "arm" ]; then
 		for ARM in ${ARMS[@]}; do
 			echo "Building sing-box-linux-${ARCH}32-v${ARM}" && cd ${CUR}/sing-box
-			env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} GOARM=${ARM} go build -o ${CUR}/release/sing-box-linux-${ARCH}32-v${ARM} -trimpath -tags 'with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor' -ldflags "-X github.com/sagernet/sing-box/constant.Version=${VERSION} -w -s -buildid=" ./cmd/sing-box
+			env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} GOARM=${ARM} go build -o ${CUR}/release/sing-box-linux-${ARCH}32-v${ARM} -trimpath -tags 'with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor' -ldflags "-X github.com/sagernet/sing-box/constant.Version=${VERSION} -w -s -buildid=" ./cmd/sing-box
 			cd ${CUR}/release && zip -9 -r sing-box-linux-${ARCH}32-v${ARM}.zip *-linux-${ARCH}32-v${ARM} geoip.db geosite.db && rm -rf *-linux-${ARCH}32-v${ARM}
 		done
 	else
 		echo "Building sing-box-linux-${ARCH}" && cd ${CUR}/sing-box
-		env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} go build -o ${CUR}/release/sing-box-linux-${ARCH} -trimpath -tags 'with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor' -ldflags "-X github.com/sagernet/sing-box/constant.Version=${VERSION} -w -s -buildid=" ./cmd/sing-box
+		env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} go build -o ${CUR}/release/sing-box-linux-${ARCH} -trimpath -tags 'with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor' -ldflags "-X github.com/sagernet/sing-box/constant.Version=${VERSION} -w -s -buildid=" ./cmd/sing-box
 		cd ${CUR}/release && zip -9 -r sing-box-linux-${ARCH}.zip *-linux-${ARCH} geoip.db geosite.db && rm -rf *-linux-${ARCH}
 	fi
 done
 
 # Build Windows-amd64
 echo "Building sing-box-windows-amd64" && cd ${CUR}/sing-box
-env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/sing-box.exe -trimpath -tags 'with_quic,with_grpc,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_acme,with_clash_api,with_v2ray_api,with_gvisor' -ldflags "-X github.com/sagernet/sing-box/constant.Version=${VERSION} -w -s -buildid=" ./cmd/sing-box
+env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ${CUR}/release/sing-box.exe -trimpath -tags 'with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor' -ldflags "-X github.com/sagernet/sing-box/constant.Version=${VERSION} -w -s -buildid=" ./cmd/sing-box
 cd ${CUR}/release && zip -9 -r sing-box-windows-amd64.zip *.exe geoip.db geosite.db && rm -rf *.exe
 
 rm -rf ${CUR}/release/{"geoip.db","geosite.db"}
