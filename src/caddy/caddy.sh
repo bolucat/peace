@@ -37,7 +37,8 @@ fi
 CADDY_FILE="caddy-linux-${ARCH}"
 
 echo "Downloading binary file: ${CADDY_FILE}"
-wget -O /usr/bin/caddy https://github.com/bolucat/peace/releases/latest/download/${CADDY_FILE} > /dev/null 2>&1
+VERSION=$(wget -qO- https://raw.githubusercontent.com/bolucat/peace/master/version/caddy.txt | head -1 | tr -d [:space:])
+wget -O /usr/bin/caddy https://github.com/bolucat/peace/releases/download/${VERSION}/${CADDY_FILE} > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
     echo "Error: Failed to download binary file: ${CADDY_FILE}" && exit 1
