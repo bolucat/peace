@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/hysteria.txt'
+      - 'version/hysteria'
 
 name: hysteria
 jobs:

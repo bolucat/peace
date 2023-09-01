@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/v2ray.txt'
+      - 'version/v2ray'
 
 name: v2ray
 jobs:

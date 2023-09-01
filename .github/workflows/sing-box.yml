@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/sing-box.txt'
+      - 'version/sing-box'
 
 name: sing-box
 jobs:

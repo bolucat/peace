@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/ss-rust.txt'
+      - 'version/ss-rust'
 
 name: ss-rust
 jobs:

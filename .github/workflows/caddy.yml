@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/caddy.txt'
+      - 'version/caddy'
 
 name: caddy
 jobs:

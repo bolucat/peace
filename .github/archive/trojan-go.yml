@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - 'version/trojan-go.txt'
+      - 'version/trojan-go'
 
 name: trojan-go
 jobs:
