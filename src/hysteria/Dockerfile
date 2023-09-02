@@ -3,7 +3,7 @@ FROM --platform=${TARGETPLATFORM} alpine:latest
 WORKDIR /root
 ARG TARGETPLATFORM
 COPY hysteria.sh /root/hysteria.sh
-COPY config.json /etc/hysteria/config.yaml
+COPY config.yaml /etc/hysteria/config.yaml
 
 RUN set -ex \
 	&& apk add --no-cache tzdata ca-certificates \
