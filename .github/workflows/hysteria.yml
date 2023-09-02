@@ -50,7 +50,7 @@ jobs:
 
       - name: Set variables
         run: |
-          echo "VERSION=$(cat "version/hysteria" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/hysteria" | head -1 | tr -d [:space:] | cut -d\/ -f2)" >> $GITHUB_ENV
         shell: bash
 
       - name: Get Dockerfile
@@ -89,10 +89,10 @@ jobs:
 
       - name: Set variables
         run: |
-          echo "VERSION=$(cat "version/hysteria" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/hysteria" | head -1 | tr -d [:space:] | cut -d\/ -f2)" >> $GITHUB_ENV
         shell: bash
 
       - name: Test Docker image
         run: |
-          docker run --rm --entrypoint /usr/bin/hysteria ${{ secrets.DOCKER_USERNAME }}/hysteria:latest --version
-          docker run --rm --entrypoint /usr/bin/hysteria ${{ secrets.DOCKER_USERNAME }}/hysteria:${{ env.VERSION }} --version
+          docker run --rm --entrypoint /usr/bin/hysteria ${{ secrets.DOCKER_USERNAME }}/hysteria:latest version
+          docker run --rm --entrypoint /usr/bin/hysteria ${{ secrets.DOCKER_USERNAME }}/hysteria:${{ env.VERSION }} version
