@@ -37,7 +37,7 @@ fi
 HYSTERIA_FILE="hysteria-linux-${ARCH}.zip"
 
 echo "Downloading binary file: ${HYSTERIA_FILE}"
-VERSION=$(wget -qO- https://raw.githubusercontent.com/bolucat/peace/master/version/hysteria.txt | head -1 | tr -d [:space:])
+VERSION=$(wget -qO- https://raw.githubusercontent.com/bolucat/peace/master/version/hysteria | head -1 | tr -d [:space:])
 wget -O $PWD/hysteria.zip https://github.com/bolucat/peace/releases/download/${VERSION}/${HYSTERIA_FILE} > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     echo "Error: Failed to download binary file: ${HYSTERIA_FILE}" && exit 1

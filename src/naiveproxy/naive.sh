@@ -29,7 +29,7 @@ fi
 NAIVE_FILE="naive-linux-${ARCH}"
 
 echo "Downloading binary file: ${NAIVE_FILE}"
-VERSION=$(wget -qO- https://raw.githubusercontent.com/bolucat/peace/master/version/naiveproxy.txt | head -1 | tr -d [:space:])
+VERSION=$(wget -qO- https://raw.githubusercontent.com/bolucat/peace/master/version/naiveproxy | head -1 | tr -d [:space:])
 wget -O /usr/bin/naive https://github.com/bolucat/peace/releases/download/${VERSION}/${NAIVE_FILE} > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
