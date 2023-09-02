@@ -2,7 +2,7 @@
 
 # Set variables
 CUR=$PWD
-VERSION=$(wget -qO- https://api.github.com/repos/HyNetwork/hysteria/tags | grep 'name' | cut -d\" -f4 | head -1)
+VERSION=$(wget -qO- https://raw.githubusercontent.com/bolucat/peace/master/version/hysteria | head -1 | tr -d [:space:])
 
 # Get source code
 mkdir -p release
@@ -32,12 +32,12 @@ for ARCH in ${ARCHS[@]}; do
     if [ "${ARCH}" == "arm" ]; then
         for ARM in ${ARMS[@]}; do
             echo "Building hysteria-linux-${ARCH}32-v${ARM}" && cd ${CUR}/hysteria
-            env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} GOARM=${ARM} go build -o ${CUR}/release/hysteria-linux-${ARCH}32-v${ARM} -trimpath -ldflags "${LDFLAGS}" ./app/cmd
+            env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} GOARM=${ARM} go build -o ${CUR}/release/hysteria-linux-${ARCH}32-v${ARM} -trimpath -ldflags "${LDFLAGS}" ./app
             cd ${CUR}/release && zip -9 -r hysteria-linux-${ARCH}32-v${ARM}.zip hysteria-linux-${ARCH}32-v${ARM} GeoLite2-Country.mmdb && rm -rf hysteria-linux-${ARCH}32-v${ARM}
         done
     else
         echo "Building hysteria-linux-${ARCH}" && cd ${CUR}/hysteria
-        env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} go build -o ${CUR}/release/hysteria-linux-${ARCH} -trimpath -ldflags "${LDFLAGS}" ./app/cmd
+        env CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} go build -o ${CUR}/release/hysteria-linux-${ARCH} -trimpath -ldflags "${LDFLAGS}" ./app
         cd ${CUR}/release && zip -9 -r hysteria-linux-${ARCH}.zip hysteria-linux-${ARCH} GeoLite2-Country.mmdb && rm -rf hysteria-linux-${ARCH}
     fi
 done

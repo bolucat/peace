@@ -1,0 +1,18 @@
+listen: :443
+
+acme:
+  domains:
+    - your.domain.net
+  email: your@email.com
+
+auth:
+  type: password
+  password: your_password
+
+masquerade:
+  type: proxy
+  file:
+    dir: /var/www/html
+  proxy:
+    url: https://your.site.com
+    rewriteHost: true
