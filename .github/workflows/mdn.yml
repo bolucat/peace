@@ -14,7 +14,7 @@ jobs:
 
       - name: Set variables
         run: |
-          echo "VERSION=$(cat "version/mdn.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/mdn" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Get Dockerfile

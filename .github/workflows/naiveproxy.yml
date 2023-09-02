@@ -24,7 +24,7 @@ jobs:
       
       - name: Set variables
         run: |
-          echo "VERSION=$(cat "version/naiveproxy.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/naiveproxy" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
           echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
@@ -134,7 +134,7 @@ jobs:
 
       - name: Set variables
         run: |
-          echo "VERSION=$(cat "version/naiveproxy.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/naiveproxy" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
           echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
@@ -211,7 +211,7 @@ jobs:
       
       - name: Set variables
         run: |
-          echo "VERSION=$(cat "version/naiveproxy.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/naiveproxy" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Get Dockerfile
@@ -250,7 +250,7 @@ jobs:
       
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/naiveproxy.txt" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/naiveproxy" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Test Docker image

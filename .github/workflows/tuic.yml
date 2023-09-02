@@ -25,7 +25,7 @@ jobs:
 
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/tuic.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/tuic" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "TUIC=$(wget -qO- https://api.github.com/repos/EAimTY/tuic/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
 
@@ -88,7 +88,7 @@ jobs:
       
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/tuic.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/tuic" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Get Dockerfile
@@ -127,7 +127,7 @@ jobs:
       
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/tuic.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/tuic" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Test Docker image

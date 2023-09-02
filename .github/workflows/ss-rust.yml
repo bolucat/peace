@@ -25,7 +25,7 @@ jobs:
 
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/ss-rust.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/ss-rust" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
           echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
           echo "SSR=$(wget -qO- https://api.github.com/repos/shadowsocks/shadowsocks-rust/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
           echo "V2PL=$(wget -qO- https://api.github.com/repos/teddysun/v2ray-plugin/tags | grep 'name' | cut -d\" -f4 | sort -r | head -1)" >> $GITHUB_ENV
@@ -132,7 +132,7 @@ jobs:
       
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/ss-rust.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/ss-rust" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Get Dockerfile
@@ -171,7 +171,7 @@ jobs:
       
       - name: Setup variables
         run: |
-          echo "VERSION=$(cat "version/ss-rust.txt" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
+          echo "VERSION=$(cat "version/ss-rust" | head -1 | tr -d [:space:])" >> $GITHUB_ENV
         shell: bash
 
       - name: Test Docker image
