@@ -94,5 +94,5 @@ jobs:
 
       - name: Test Docker image
         run: |
-          docker run --rm --entrypoint /usr/bin/sing-box-dev ${{ secrets.DOCKER_USERNAME }}/sing-box:latest-dev version
-          docker run --rm --entrypoint /usr/bin/sing-box-dev ${{ secrets.DOCKER_USERNAME }}/sing-box:${{ env.VERSION }} version
+          docker run --rm --entrypoint /usr/bin/sing-box ${{ secrets.DOCKER_USERNAME }}/sing-box:latest-dev version
+          docker run --rm --entrypoint /usr/bin/sing-box ${{ secrets.DOCKER_USERNAME }}/sing-box:${{ env.VERSION }} version
