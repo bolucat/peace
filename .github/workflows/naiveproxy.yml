@@ -123,10 +123,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install wget
-        run: |
-          powershell "choco install wget"
-
       - name: Install ninja
         uses: seanmiddleditch/gha-setup-ninja@master
         with:
@@ -135,8 +131,8 @@ jobs:
       - name: Set variables
         run: |
           echo "VERSION=$(cat "version/naiveproxy" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
-          echo "NAIVE=$(wget -qO- https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "NAIVE=$(curl -s -o - https://api.github.com/repos/klzgrad/naiveproxy/tags | grep 'name' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
+          echo "GOLANG=$(curl -s -o - https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
         shell: bash
         
       - name: Install Golang
