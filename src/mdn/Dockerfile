@@ -1,4 +1,4 @@
-FROM --platform=${TARGETPLATFORM} node:18-alpine
+FROM --platform=${TARGETPLATFORM} node:22-alpine
 
 WORKDIR /root
 ARG TARGETPLATFORM
