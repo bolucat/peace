@@ -9,6 +9,7 @@ RUN set -ex \
     pkgconfig libpng libpng-dev g++ \
     && git clone https://github.com/mdn/content \
     && mv content/* /root \
+    && mv content/.git /root \
     && rm -rf content \
     && npm install -g npm@latest \
     && npm --force install -g yarn \
