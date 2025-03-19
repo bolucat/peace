@@ -21,7 +21,7 @@ jobs:
     
     steps:    
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup variables
         run: |
@@ -31,23 +31,24 @@ jobs:
           echo "V2PL=$(wget -qO- https://api.github.com/repos/teddysun/v2ray-plugin/tags | grep 'name' | cut -d\" -f4 | sort -r | head -1)" >> $GITHUB_ENV
         shell: bash
 
+      - name: Install LLVM and Clang
+        run: sudo apt install -y clang
+
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          target: ${{ matrix.target }}
-          toolchain: stable
-          default: true
-          override: true
+        run: |
+          rustup set profile minimal
+          rustup toolchain install stable
+          rustup default stable
+          rustup override set stable
 
       - name: Install Golang
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with: 
-          go-version: 1.20.4
+          go-version: ${{ env.GOLANG }}
 
       - name: Install cross
         run: |
-          cargo install cross
+          cargo install cross --git https://github.com/cross-rs/cross
 
       - name: Start build
         run: |
@@ -128,7 +129,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup variables
         run: |
@@ -167,7 +168,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup variables
         run: |

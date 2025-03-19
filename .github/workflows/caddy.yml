@@ -10,7 +10,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup variables
         run: |
@@ -21,7 +21,7 @@ jobs:
         shell: bash
 
       - name: Install Golang
-        uses: actions/setup-go@v4
+        uses: actions/checkout@v5
         with: 
           go-version: ${{ env.GOLANG }}
 
@@ -47,7 +47,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup variables
         run: |
@@ -58,7 +58,7 @@ jobs:
         shell: bash
 
       - name: Install Golang
-        uses: actions/setup-go@v4
+        uses: actions/checkout@v5
         with: 
           go-version: ${{ env.GOLANG }}
 
@@ -85,7 +85,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup variables
         run: |
@@ -124,7 +124,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup variables
         run: |
@@ -163,7 +163,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup variables
         run: |
