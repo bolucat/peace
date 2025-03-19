@@ -21,7 +21,7 @@ jobs:
         shell: bash
 
       - name: Install Golang
-        uses: actions/checkout@v5
+        uses: actions/setup-go@v5
         with: 
           go-version: ${{ env.GOLANG }}
 
@@ -58,7 +58,7 @@ jobs:
         shell: bash
 
       - name: Install Golang
-        uses: actions/checkout@v5
+        uses: actions/setup-go@v5
         with: 
           go-version: ${{ env.GOLANG }}
 
