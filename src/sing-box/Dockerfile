@@ -13,4 +13,4 @@ RUN set -ex \
 	&& rm -rfv /root/sing-box.sh
 
 VOLUME /etc/sing-box
-CMD [ "/usr/bin/sing-box", "run", "--config", "/etc/sing-box/config.json" ]
+CMD [ "/usr/bin/sing-box", "-C", "/etc/sing-box/config.json", "run" ]
