@@ -34,7 +34,7 @@ echo "Download binary file: ${SING_BOX_FILE} completed"
 
 echo "Prepare to use"
 unzip sing-box.zip && rm -rfv sing-box.zip
-chmod +x *-linux-${ARCH}
-mv sing-box-linux-${ARCH} /usr/bin/sing-box
+chmod +x sing-box
+mv sing-box /usr/bin/sing-box
 mv geosite.db geoip.db /usr/bin/
 echo "Done"
