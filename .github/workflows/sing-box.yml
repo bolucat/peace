@@ -2,6 +2,7 @@ on:
   push:
     paths:
       - 'version/sing-box'
+      - '.github/workflows/sing-box.yml'
 
 name: sing-box
 jobs:
@@ -81,7 +82,7 @@ jobs:
           wget -O dist/geosite.db https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db
           wget -O dist/geoip.db https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db
           go build -v -trimpath -o dist/sing-box -tags "${BUILD_TAGS}" \
-          -ldflags '-s -buildid= -X github.com/sagernet/sing-box/constant.Version=${VERSION} \
+          -ldflags '-s -buildid= -X github.com/sagernet/sing-box/constant.Version=${VERSION}' \
           ./cmd/sing-box
         env:
           CGO_ENABLED: "1"
