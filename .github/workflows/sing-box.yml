@@ -22,8 +22,16 @@ jobs:
       - name: Set Env
         run: |
           echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          echo "VERSION=$(cat "version/sing-box" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
+          # echo "VERSION=$(cat "version/sing-box" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
           wget -qO- https://raw.githubusercontent.com/SagerNet/sing-box/refs/heads/dev-next/.github/CRONET_GO_VERSION | head -n1 | tr -d [:space:] > .github/CRONET_GO_VERSION
+        shell: bash
+
+      - name: Set version
+        id: set_version
+        run: |
+          set -xeuo pipefail
+          VERSION=$(cat "version/sing-box" | head -n1 | tr -d [:space:])
+          echo "VERSION=${VERSION}" >> "$GITHUB_OUTPUT"
         shell: bash
 
       - name: Clone repository
@@ -90,7 +98,7 @@ jobs:
           wget -O dist/geosite.db https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db
           wget -O dist/geoip.db https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db
           go build -v -trimpath -o dist/sing-box -tags "${BUILD_TAGS}" \
-          -ldflags '-s -buildid= -X github.com/sagernet/sing-box/constant.Version="${VERSION}"' \
+          -ldflags '-s -buildid= -X github.com/sagernet/sing-box/constant.Version=${{ needs.set_version.outputs.VERSION }}' \
           ./cmd/sing-box
         env:
           CGO_ENABLED: "1"
