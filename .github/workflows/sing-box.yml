@@ -22,8 +22,7 @@ jobs:
       - name: Set Env
         run: |
           echo "GOLANG=$(wget -qO- https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep 'version' | cut -d\" -f4 | head -1)" >> $GITHUB_ENV
-          # echo "VERSION=$(cat "version/sing-box" | head -n1 | tr -d [:space:])" >> $GITHUB_ENV
-          wget -qO- https://raw.githubusercontent.com/SagerNet/sing-box/refs/heads/dev-next/.github/CRONET_GO_VERSION | head -n1 | tr -d [:space:] > .github/CRONET_GO_VERSION
+          wget -qO- https://raw.githubusercontent.com/SagerNet/sing-box/refs/heads/testing/.github/CRONET_GO_VERSION | head -n1 | tr -d [:space:] > .github/CRONET_GO_VERSION
         shell: bash
 
       - name: Set version
@@ -37,7 +36,7 @@ jobs:
       - name: Clone repository
         run: |
           set -xeuo pipefail
-          git clone --depth=1 --branch=dev-next https://github.com/SagerNet/sing-box.git sing-box
+          git clone --depth=1 --branch=testing https://github.com/SagerNet/sing-box.git sing-box
           cp -r sing-box/. ./
           rm -rf sing-box
 
