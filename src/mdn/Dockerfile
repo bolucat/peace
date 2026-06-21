@@ -1,7 +1,10 @@
-FROM --platform=${TARGETPLATFORM} node:22-alpine
+FROM --platform=${TARGETPLATFORM} node:24-alpine
 
 WORKDIR /root
 ARG TARGETPLATFORM
+
+RUN corepack enable
+RUN corepack prepare yarn@stable --activate
 
 RUN set -ex \
     && apk add --no-cache git wget tzdata \
@@ -12,7 +15,6 @@ RUN set -ex \
     && mv content/.git /root \
     && rm -rf content \
     && npm install -g npm@latest \
-    && npm --force install -g yarn \
     && yarn config set network-timeout 600000 -g \
     && yarn \
     && echo "SERVER_PORT=5000" >> .env \
