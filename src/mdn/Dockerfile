@@ -3,9 +3,6 @@ FROM --platform=${TARGETPLATFORM} node:24-alpine
 WORKDIR /root
 ARG TARGETPLATFORM
 
-RUN corepack enable
-RUN corepack prepare yarn@stable --activate
-
 RUN set -ex \
     && apk add --no-cache git wget tzdata \
     make nasm autoconf automake libtool dpkg \
