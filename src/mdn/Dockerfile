@@ -14,12 +14,10 @@ RUN set -ex \
     && mv content/* /root \
     && mv content/.git /root \
     && rm -rf content \
-    && npm install -g npm@latest \
-    && yarn config set network-timeout 600000 -g \
-    && yarn \
+    && npm install \
     && echo "SERVER_PORT=5000" >> .env \
     && apk del git wget make automake autoconf
 
 EXPOSE 5000
 VOLUME /root
-CMD [ "yarn", "start" ]
+CMD [ "npm", "start" ]
