@@ -45,7 +45,8 @@ jobs:
       - name: Install Golang
         uses: actions/setup-go@v6
         with: 
-          go-version: ${{ env.GOLANG }}
+          # go-version: ${{ env.GOLANG }}
+          go-version: 1.26.6
 
       - name: Clone cronet-go
         run: |
