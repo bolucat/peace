@@ -1,4 +1,4 @@
-FROM --platform=${TARGETPLATFORM} debian:bullseye-slim
+FROM --platform=${TARGETPLATFORM} debian:trixie-slim
 
 WORKDIR /root
 ARG TARGETPLATFORM
