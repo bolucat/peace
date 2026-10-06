@@ -5,6 +5,13 @@
 # PROTOCOL=$(wget -qO- https://api.github.com/repos/mastercactapus/caddy2-proxyprotocol/tags | grep 'name' | cut -d\" -f4 | head -1)
 
 # Get source code
+CADDY_VERSION=$(wget -qO- https://raw.githubusercontent.com/bolucat/peace/master/version/caddy | head -1 | tr -d [:space:])
+git clone --depth 1 --branch ${CADDY_VERSION} https://github.com/caddyserver/caddy caddy-bbr
+# Get Patch
+wget -qO- https://raw.githubusercontent.com/bolucat/forwardproxy/refs/heads/naive/caddy-sing-quic-bbrv1.patch > caddy-sing-quic-bbrv1.patch
+git -C ./caddy-bbr apply ../caddy-sing-quic-bbrv1.patch
+rm -rf caddy-sing-quic-bbrv1.patch
+
 go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 git clone -b naive https://github.com/bolucat/forwardproxy
 git clone https://github.com/mholt/caddy-l4 caddy-l4
@@ -33,10 +40,10 @@ for ARCH in ${ARCHS[@]}; do
 	if [ "${ARCH}" == "arm" ]; then
 		for ARM in ${ARMS[@]}; do
 			echo "Building caddy-linux-${ARCH}32-v${ARM}"
-			env GOOS=linux GOARCH=${ARCH} GOARM=${ARM} $GOPATH/bin/xcaddy build --output release/caddy-linux-${ARCH}32-v${ARM} ${NAIVE} ${LAYER_4} ${CF_DNS} ${WEBDAV}
+			env GOOS=linux GOARCH=${ARCH} GOARM=${ARM} $GOPATH/bin/xcaddy build --output release/caddy-linux-${ARCH}32-v${ARM} --replace "github.com/caddyserver/caddy/v2=$PWD/caddy-bbr" ${NAIVE} ${LAYER_4} ${CF_DNS} ${WEBDAV}
 		done
 	else
 		echo "Building caddy-linux-${ARCH}"
-		env GOOS=linux GOARCH=${ARCH} $GOPATH/bin/xcaddy build --output release/caddy-linux-${ARCH} ${NAIVE} ${LAYER_4} ${CF_DNS} ${WEBDAV}
+		env GOOS=linux GOARCH=${ARCH} $GOPATH/bin/xcaddy build --output release/caddy-linux-${ARCH} --replace "github.com/caddyserver/caddy/v2=$PWD/caddy-bbr" ${NAIVE} ${LAYER_4} ${CF_DNS} ${WEBDAV}
 	fi
 done
