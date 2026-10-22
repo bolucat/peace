@@ -9,8 +9,10 @@ CADDY_VERSION=$(wget -qO- https://raw.githubusercontent.com/bolucat/peace/master
 git clone --depth 1 --branch ${CADDY_VERSION} https://github.com/caddyserver/caddy caddy-bbr
 # Get Patch
 wget -qO- https://raw.githubusercontent.com/bolucat/forwardproxy/refs/heads/naive/caddy-sing-quic-bbrv1.patch > caddy-sing-quic-bbrv1.patch
+wget -qO- https://raw.githubusercontent.com/bolucat/forwardproxy/refs/heads/naive/caddy-read-idle-timeout.patch > caddy-read-idle-timeout.patch
 git -C ./caddy-bbr apply ../caddy-sing-quic-bbrv1.patch
-rm -rf caddy-sing-quic-bbrv1.patch
+git -C ./caddy-bbr apply ../caddy-read-idle-timeout.patch
+rm -rf caddy-sing-quic-bbrv1.patch caddy-read-idle-timeout.patch
 
 go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 git clone -b naive https://github.com/bolucat/forwardproxy
